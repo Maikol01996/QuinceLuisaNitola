@@ -2,13 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
 import type { Playlist } from '@/lib/types';
-import { MusicIcon } from 'lucide-react';
 import React from 'react';
 
 type MusicProps = {
@@ -16,18 +10,6 @@ type MusicProps = {
 };
 
 export function Music({ playlist }: MusicProps) {
-  const { toast } = useToast();
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Here you would typically call a server action
-    console.log('Song request submitted');
-    toast({
-      title: '¡Gracias por tu sugerencia!',
-      description: 'Hemos recibido tu canción.',
-    });
-    (event.target as HTMLFormElement).reset();
-  };
 
   return (
     <section id="musica" className="container mx-auto px-4">
@@ -40,11 +22,11 @@ export function Music({ playlist }: MusicProps) {
         <h2 className="font-headline text-4xl md:text-5xl text-center mb-10">
           Música para la Fiesta
         </h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 gap-8 max-w-2xl mx-auto">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline text-2xl">La Playlist de la Fiesta</CardTitle>
-              <CardDescription>¡Síguenos y prepárate para bailar!</CardDescription>
+              <CardTitle className="font-headline text-2xl text-center">La Playlist de la Fiesta</CardTitle>
+              <CardDescription className="text-center">¡Síguenos en Spotify y prepárate para bailar!</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="aspect-video">
@@ -59,33 +41,6 @@ export function Music({ playlist }: MusicProps) {
                   loading="lazy"
                 ></iframe>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="font-headline text-2xl">¿Cuál canción no puede faltar?</CardTitle>
-              <CardDescription>¡Ayúdanos a crear la playlist perfecta! Sugiere tu canción favorita.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="songTitle">Título de la canción</Label>
-                  <Input id="songTitle" name="songTitle" required placeholder="Ej: Vivir Mi Vida" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="artist">Artista</Label>
-                  <Input id="artist" name="artist" placeholder="Ej: Marc Anthony" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="dedication">Dedicatoria (opcional)</Label>
-                  <Textarea id="dedication" name="dedication" placeholder="Para..." />
-                </div>
-                <Button type="submit" className="w-full">
-                  <MusicIcon className="mr-2 h-4 w-4" />
-                  Enviar Sugerencia
-                </Button>
-              </form>
             </CardContent>
           </Card>
         </div>
