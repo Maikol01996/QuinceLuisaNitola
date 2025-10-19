@@ -23,16 +23,24 @@ export function Countdown({ date }: CountdownProps) {
 
   useEffect(() => {
     setIsClient(true);
-    const timer = setInterval(() => {
-      const duration = intervalToDuration({ start: new Date(), end: date });
-      setTimeLeft(duration);
-    }, 1000);
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      if (now < date) {
+        const duration = intervalToDuration({ start: now, end: date });
+        setTimeLeft(duration);
+      } else {
+        setTimeLeft({});
+      }
+    };
+
+    calculateTimeLeft(); // Initial calculation
+    const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
   }, [date]);
 
   if (!isClient) {
-    return <div className="h-48" />; // Placeholder for SSR
+    return <div className="h-48" />; // Placeholder for SSR to prevent layout shift
   }
 
   const isEventTime = Object.values(timeLeft).every(val => val === 0 || val === undefined);

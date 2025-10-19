@@ -1,5 +1,5 @@
 'use client';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -22,8 +22,14 @@ export function Hero({ headline, date }: HeroProps) {
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '200%']);
 
-  const formattedDate = format(date, "eeee, dd 'de' MMMM 'de' yyyy", { locale: es });
-  const formattedTime = format(date, "h:mm a", { locale: es });
+  const [formattedDate, setFormattedDate] = useState('');
+  const [formattedTime, setFormattedTime] = useState('');
+
+  useEffect(() => {
+    // This ensures date formatting happens only on the client, avoiding hydration mismatch.
+    setFormattedDate(format(date, "eeee, dd 'de' MMMM 'de' yyyy", { locale: es }));
+    setFormattedTime(format(date, "h:mm a", { locale: es }));
+  }, [date]);
 
   return (
     <div
@@ -56,10 +62,14 @@ export function Hero({ headline, date }: HeroProps) {
           <h1 className="font-headline text-6xl md:text-8xl lg:text-9xl font-bold my-2 text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-primary/80">
             {headline}
           </h1>
-          <p className="text-lg md:text-xl mt-4 max-w-2xl">
-            {formattedDate} &bull; {formattedTime}
-          </p>
-          <p className="text-lg md:text-xl">Bogotá, Colombia</p>
+          {formattedDate && (
+             <>
+              <p className="text-lg md:text-xl mt-4 max-w-2xl">
+                {formattedDate} &bull; {formattedTime}
+              </p>
+              <p className="text-lg md:text-xl">Bogotá, Colombia</p>
+             </>
+          )}
         </div>
 
         <Button
