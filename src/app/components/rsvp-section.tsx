@@ -30,6 +30,7 @@ import { Separator } from '@/components/ui/separator';
 import { PlusCircle, Trash2, Users, Calendar, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import successAnimation from '@/lib/success-animation.json';
+import { Label } from '@/components/ui/label';
 
 const rsvpSchema = z.object({
   attending: z.enum(['yes', 'no'], { required_error: 'Por favor selecciona una opción.' }),
