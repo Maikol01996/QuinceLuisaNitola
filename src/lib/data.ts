@@ -3,7 +3,7 @@ import type { Event, Guest } from './types';
 export const eventData: Event = {
   id: 'luisa-xv-2025',
   title: 'XV de Luisa Nitola',
-  date: new Date('2025-12-14T16:00:00-05:00'),
+  date: new Date('2025-12-14T16:00:00'),
   timezone: 'America/Bogota',
   hero: {
     headline: 'Mis 15 Años',

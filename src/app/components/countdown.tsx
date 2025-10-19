@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { intervalToDuration } from 'date-fns';
+import { intervalToDuration, format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { motion } from 'framer-motion';
 
 type CountdownProps = {
@@ -20,9 +21,11 @@ const timeLabels: Record<TimeUnit, string> = {
 export function Countdown({ date }: CountdownProps) {
   const [timeLeft, setTimeLeft] = useState<Duration>({});
   const [isClient, setIsClient] = useState(false);
+  const [formattedDate, setFormattedDate] = useState('');
 
   useEffect(() => {
     setIsClient(true);
+    setFormattedDate(format(date, "eeee, dd 'de' MMMM 'de' yyyy", { locale: es }));
     const calculateTimeLeft = () => {
       const now = new Date();
       if (now < date) {
@@ -79,6 +82,11 @@ export function Countdown({ date }: CountdownProps) {
               </div>
             ))}
           </div>
+          {formattedDate && (
+            <p className="text-center text-lg text-muted-foreground mt-6">
+              {formattedDate}
+            </p>
+          )}
         </motion.div>
       </div>
     </section>
