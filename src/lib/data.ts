@@ -73,7 +73,7 @@ export const eventData: Event = {
   },
   playlist: {
     provider: 'spotify',
-    url: 'https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M',
+    url: 'https://open.spotify.com/embed/playlist/1sXppDtN8afNNN1LD1B5tH?utm_source=generator',
     public: true,
   },
   hashtag: '#XVdeLuisa',

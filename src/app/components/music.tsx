@@ -43,8 +43,8 @@ export function Music({ playlist }: MusicProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline text-2xl">Playlist Oficial</CardTitle>
-              <CardDescription>¡Para que te vayas preparando para la fiesta!</CardDescription>
+              <CardTitle className="font-headline text-2xl">La Playlist de la Fiesta</CardTitle>
+              <CardDescription>¡Síguenos y prepárate para bailar!</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="aspect-video">
@@ -64,8 +64,8 @@ export function Music({ playlist }: MusicProps) {
 
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline text-2xl">Pide una Canción</CardTitle>
-              <CardDescription>¿Qué canción no puede faltar en la pista de baile?</CardDescription>
+              <CardTitle className="font-headline text-2xl">¿Cuál canción no puede faltar?</CardTitle>
+              <CardDescription>¡Ayúdanos a crear la playlist perfecta! Sugiere tu canción favorita.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
