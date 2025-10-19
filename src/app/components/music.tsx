@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import type { Playlist } from '@/lib/types';
 import { MusicIcon } from 'lucide-react';
+import React from 'react';
 
 type MusicProps = {
   playlist: Playlist;
@@ -70,7 +71,7 @@ export function Music({ playlist }: MusicProps) {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="songTitle">Título de la canción</Label>
-                  <Input id="songTitle" name="songTitle" required placeholder="Ej: "Vivir Mi Vida"" />
+                  <Input id="songTitle" name="songTitle" required placeholder="Ej: Vivir Mi Vida" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="artist">Artista</Label>
