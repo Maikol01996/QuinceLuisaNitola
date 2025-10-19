@@ -51,7 +51,7 @@ export type Playlist = {
 export type Event = {
   id: string;
   title: string;
-  date: Date;
+  date: string;
   timezone: string;
   hero: {
     headline: string;

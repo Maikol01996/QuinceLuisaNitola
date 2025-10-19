@@ -9,10 +9,10 @@ import Image from 'next/image';
 
 type HeroProps = {
   headline: string;
-  date: Date;
+  date: string;
 };
 
-export function Hero({ headline, date }: HeroProps) {
+export function Hero({ headline, date: dateString }: HeroProps) {
   const targetRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -26,10 +26,11 @@ export function Hero({ headline, date }: HeroProps) {
   const [formattedTime, setFormattedTime] = useState('');
 
   useEffect(() => {
+    const date = new Date(dateString);
     // This ensures date formatting happens only on the client, avoiding hydration mismatch.
     setFormattedDate(format(date, "eeee, dd 'de' MMMM 'de' yyyy", { locale: es }));
     setFormattedTime(format(date, "h:mm a", { locale: es }));
-  }, [date]);
+  }, [dateString]);
 
   return (
     <div

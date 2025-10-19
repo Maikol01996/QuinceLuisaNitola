@@ -5,7 +5,7 @@ import { es } from 'date-fns/locale';
 import { motion } from 'framer-motion';
 
 type CountdownProps = {
-  date: Date;
+  date: string;
 };
 
 type TimeUnit = 'days' | 'hours' | 'minutes' | 'seconds';
@@ -18,18 +18,20 @@ const timeLabels: Record<TimeUnit, string> = {
   seconds: 'Segundos',
 };
 
-export function Countdown({ date }: CountdownProps) {
+export function Countdown({ date: dateString }: CountdownProps) {
   const [timeLeft, setTimeLeft] = useState<Duration>({});
   const [isClient, setIsClient] = useState(false);
   const [formattedDate, setFormattedDate] = useState('');
+  
+  const eventDate = new Date(dateString);
 
   useEffect(() => {
     setIsClient(true);
-    setFormattedDate(format(date, "eeee, dd 'de' MMMM 'de' yyyy", { locale: es }));
+    setFormattedDate(format(eventDate, "eeee, dd 'de' MMMM 'de' yyyy", { locale: es }));
     const calculateTimeLeft = () => {
       const now = new Date();
-      if (now < date) {
-        const duration = intervalToDuration({ start: now, end: date });
+      if (now < eventDate) {
+        const duration = intervalToDuration({ start: now, end: eventDate });
         setTimeLeft(duration);
       } else {
         setTimeLeft({});
@@ -40,7 +42,7 @@ export function Countdown({ date }: CountdownProps) {
     const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
-  }, [date]);
+  }, [dateString]);
 
   if (!isClient) {
     return <div className="h-48" />; // Placeholder for SSR to prevent layout shift
