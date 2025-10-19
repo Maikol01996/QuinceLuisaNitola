@@ -5,7 +5,7 @@ export const eventData: Event = {
   title: 'XV de Luisa Nitola',
   // Use UTC to avoid timezone issues between server and client.
   // The time is set to 16:00 Bogota time (UTC-5), so 21:00 UTC.
-  date: new Date('2025-12-14T21:00:00Z'),
+  date: new Date('2025-12-14T16:00:00'),
   timezone: 'America/Bogota',
   hero: {
     headline: 'Mis 15 Años',
