@@ -3,7 +3,9 @@ import type { Event, Guest } from './types';
 export const eventData: Event = {
   id: 'luisa-xv-2025',
   title: 'XV de Luisa Nitola',
-  date: new Date('2025-12-14T16:00:00'),
+  // Use UTC to avoid timezone issues between server and client.
+  // The time is set to 16:00 Bogota time (UTC-5), so 21:00 UTC.
+  date: new Date('2025-12-14T21:00:00Z'),
   timezone: 'America/Bogota',
   hero: {
     headline: 'Mis 15 Años',
