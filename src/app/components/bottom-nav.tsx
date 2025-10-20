@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { Home, Calendar, Gift, Music, CheckCircle } from 'lucide-react';
+import { Home, Calendar, Gift, Music, CheckCircle, ImageIcon } from 'lucide-react';
 
 const navItems = [
   { href: '#', icon: Home, label: 'Inicio' },
   { href: '#detalles', icon: Calendar, label: 'Detalles' },
   { href: '#regalos', icon: Gift, label: 'Regalos' },
+  { href: '#galeria', icon: ImageIcon, label: 'Galería'},
   { href: '#musica', icon: Music, label: 'Música' },
   { href: '#rsvp', icon: CheckCircle, label: 'RSVP' },
 ];

@@ -11,6 +11,7 @@ import { RsvpSection } from './components/rsvp-section';
 import { AppFooter } from './components/footer';
 import { BottomNav } from './components/bottom-nav';
 import { Suspense } from 'react';
+import { PhotoGallery } from './components/photo-gallery';
 
 export default function Home() {
   const { hero, date, parents, padrinos, venues, program, dressCode, gifts, playlist, hashtag } = eventData;
@@ -30,6 +31,7 @@ export default function Home() {
           <DressCode dressCode={dressCode} />
           <Gifts gifts={gifts} />
           <Music playlist={playlist} />
+          <PhotoGallery />
           <RsvpSection />
         </div>
       </main>

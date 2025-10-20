@@ -93,3 +93,12 @@ export const guestsData: Guest[] = [
     { id: 'g9', eventId: 'luisa-xv-2025', name: 'Sofia Jimenez', maxSeats: 2, code: 'y7z8a', status: 'invited' },
     { id: 'g10', eventId: 'luisa-xv-2025', name: 'Pedro Vargas', maxSeats: 1, code: 'b9c0d', status: 'pending' },
 ];
+
+export const galleryImages = [
+  { src: 'https://picsum.photos/seed/gal1/600/600', alt: 'Gallery image 1', hint: 'quinceanera portrait' },
+  { src: 'https://picsum.photos/seed/gal2/600/600', alt: 'Gallery image 2', hint: 'family picture' },
+  { src: 'https://picsum.photos/seed/gal3/600/600', alt: 'Gallery image 3', hint: 'friends group photo' },
+  { src: 'https://picsum.photos/seed/gal4/600/600', alt: 'Gallery image 4', hint: 'birthday cake' },
+  { src: 'https://picsum.photos/seed/gal5/600/600', alt: 'Gallery image 5', hint: 'dancing party' },
+  { src: 'https://picsum.photos/seed/gal6/600/600', alt: 'Gallery image 6', hint: 'event decoration' },
+];
