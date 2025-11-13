@@ -95,6 +95,7 @@ export const guestsData: Guest[] = [
 ];
 
 export const galleryImages = [
+  { src: '/LuisaPortadaCollage.jpg', alt: 'Luisa Quinceañera', hint: 'quinceanera portrait' },
   { src: 'https://picsum.photos/seed/gal1/600/600', alt: 'Gallery image 1', hint: 'quinceanera portrait' },
   { src: 'https://picsum.photos/seed/gal2/600/600', alt: 'Gallery image 2', hint: 'family picture' },
   { src: 'https://picsum.photos/seed/gal3/600/600', alt: 'Gallery image 3', hint: 'friends group photo' },
