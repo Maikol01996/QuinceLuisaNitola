@@ -16,30 +16,30 @@ export const eventData: Event = {
   ],
   padrinos: [
     { name: 'Brandon Torres', role: 'Padrino' },
-    { name: 'Madrina por confirmar', role: 'Madrina' },
+    { name: 'Mayra Huamani', role: 'Madrina' },
   ],
   venues: [
     {
       type: 'Ceremonia',
       name: 'Hacienda Salamanca',
-      address: 'Bogotá, Colombia',
-      lat: 4.6377,
-      lng: -74.064,
+      address: 'Vía Tenjo, Cundinamarca',
+      lat: 4.7783357,
+      lng: -74.1757042,
       time: '16:00',
       photoUrl: '/Iglesia.jpeg',
       imageHint: 'church ceremony',
-      mapUrl: 'https://maps.app.goo.gl/g2d5Yk2z5GqN8Xqf9',
+      mapUrl: 'https://www.google.com/maps/place/Hacienda+salamanca/@4.7783357,-74.1757042,14.61z/data=!4m14!1m7!3m6!1s0x8e3f81863e149d85:0x28f737da52c42c8e!2sHacienda+salamanca!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm!3m5!1s0x8e3f81863e149d85:0x28f737da52c42c8e!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm?entry=ttu&g_ep=EgoyMDI1MTExMC4wIKXMDSoASAFQAw%3D%3D',
     },
     {
       type: 'Recepción',
       name: 'Hacienda Salamanca',
-      address: 'Bogotá, Colombia',
-      lat: 4.6625,
-      lng: -74.05,
+      address: 'Vía Tenjo, Cundinamarca',
+      lat: 4.7783357,
+      lng: -74.1757042,
       time: '18:00',
       photoUrl: '/Salamanca.jpg',
       imageHint: 'event hall night',
-      mapUrl: 'https://maps.app.goo.gl/g2d5Yk2z5GqN8Xqf9',
+      mapUrl: 'https://www.google.com/maps/place/Hacienda+salamanca/@4.7783357,-74.1757042,14.61z/data=!4m14!1m7!3m6!1s0x8e3f81863e149d85:0x28f737da52c42c8e!2sHacienda+salamanca!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm!3m5!1s0x8e3f81863e149d85:0x28f737da52c42c8e!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm?entry=ttu&g_ep=EgoyMDI1MTExMC4wIKXMDSoASAFQAw%3D%3D',
     },
   ],
   program: [
@@ -53,7 +53,7 @@ export const eventData: Event = {
   ],
   dressCode: {
     label: 'Etiqueta (Formal)',
-    palette: ['#F6D1E7', '#D3E4FD', '#FFF3C4'],
+    palette: ['#E6B8B8', '#869D7D', '#D4AF37', '#B1A2C4'],
   },
   gifts: {
     bank: {
