@@ -53,7 +53,7 @@ export const eventData: Event = {
   ],
   dressCode: {
     label: 'Etiqueta (Formal)',
-    palette: ['#E6B8B8', '#869D7D', '#D4AF37', '#B1A2C4'],
+    palette: ['#F8C8DC', '#869D7D', '#D4AF37', '#B1A2C4'],
   },
   gifts: {
     bank: {
@@ -96,10 +96,9 @@ export const guestsData: Guest[] = [
 
 export const galleryImages = [
   { src: '/LuisaPortadaCollage.jpg', alt: 'Luisa Quinceañera', hint: 'quinceanera portrait' },
-  { src: 'https://picsum.photos/seed/gal1/600/600', alt: 'Gallery image 1', hint: 'quinceanera portrait' },
-  { src: 'https://picsum.photos/seed/gal2/600/600', alt: 'Gallery image 2', hint: 'family picture' },
-  { src: 'https://picsum.photos/seed/gal3/600/600', alt: 'Gallery image 3', hint: 'friends group photo' },
-  { src: 'https://picsum.photos/seed/gal4/600/600', alt: 'Gallery image 4', hint: 'birthday cake' },
-  { src: 'https://picsum.photos/seed/gal5/600/600', alt: 'Gallery image 5', hint: 'dancing party' },
-  { src: 'https://picsum.photos/seed/gal6/600/600', alt: 'Gallery image 6', hint: 'event decoration' },
+  { src: '/Collage/Collage1.png', alt: 'Collage image 1', hint: 'quinceanera portrait' },
+  { src: '/Collage/Collage2.png', alt: 'Collage image 2', hint: 'family picture' },
+  { src: '/Collage/Collage3.png', alt: 'Collage image 3', hint: 'friends group photo' },
+  { src: '/Collage/Collage4.png', alt: 'Collage image 4', hint: 'birthday cake' },
+  { src: '/Collage/Collage5.png', alt: 'Collage image 5', hint: 'dancing party' },
 ];
