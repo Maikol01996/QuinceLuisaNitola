@@ -21,13 +21,16 @@ const timeLabels: Record<TimeUnit, string> = {
 export function Countdown({ date: dateString }: CountdownProps) {
   const [timeLeft, setTimeLeft] = useState<Duration>({});
   const [isClient, setIsClient] = useState(false);
-  const [formattedDate, setFormattedDate] = useState('');
   
+  // This ensures the date is interpreted consistently across server and client.
+  // By creating the date object here, we avoid timezone issues from SSR.
   const eventDate = new Date(dateString);
+  const formattedDate = format(eventDate, "eeee, dd 'de' MMMM 'de' yyyy", { locale: es });
+
 
   useEffect(() => {
     setIsClient(true);
-    setFormattedDate(format(eventDate, "eeee, dd 'de' MMMM 'de' yyyy", { locale: es }));
+    
     const calculateTimeLeft = () => {
       const now = new Date();
       if (now < eventDate) {
