@@ -42,9 +42,9 @@ export function Hero({ headline, date: dateString }: HeroProps) {
         style={{ y: backgroundY }}
       >
         <Image
-          src="https://picsum.photos/seed/hero-bg/1920/1080"
-          alt="Elegant background"
-          data-ai-hint="elegant floral background"
+          src="https://firebasestorage.googleapis.com/v0/b/gweb-cloud-web-dev.appspot.com/o/tool-code-images%2Fuser-uploads%2F8f506e90-c651-4040-9a25-c637c355fc2c..blob?alt=media&token=894371f4-3488-468a-a82f-b2586a11124d"
+          alt="Luisa Nitola Quinceañera"
+          data-ai-hint="quinceanera sunset portrait"
           fill
           className="object-cover"
           priority
