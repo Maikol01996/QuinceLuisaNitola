@@ -43,16 +43,29 @@ export function Timeline({ items }: TimelineProps) {
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6 }}
           >
-            <div className={`w-[calc(50%-2rem)] text-right ${index % 2 === 0 ? 'order-1' : 'order-3'}`}>
-              <p className="font-bold text-lg">{item.title}</p>
-              <p className="text-muted-foreground">{item.time}</p>
-            </div>
-            
-            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-primary-foreground order-2 z-10">
-              <div className="[&>svg]:w-6 [&>svg]:h-6">{iconMap[item.icon] || <Church />}</div>
-            </div>
-
-            <div className={`w-[calc(50%-2rem)] ${index % 2 === 0 ? 'order-3' : 'order-1'}`} />
+            {index % 2 === 0 ? (
+              <>
+                <div className="w-[calc(50%-2rem)] text-right">
+                  <p className="font-bold text-lg">{item.title}</p>
+                  <p className="text-muted-foreground">{item.time}</p>
+                </div>
+                <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10">
+                  <div className="[&>svg]:w-6 [&>svg]:h-6">{iconMap[item.icon] || <Church />}</div>
+                </div>
+                <div className="w-[calc(50%-2rem)]" />
+              </>
+            ) : (
+              <>
+                <div className="w-[calc(50%-2rem)]" />
+                <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10">
+                  <div className="[&>svg]:w-6 [&>svg]:h-6">{iconMap[item.icon] || <Church />}</div>
+                </div>
+                <div className="w-[calc(50%-2rem)] text-left">
+                  <p className="font-bold text-lg">{item.title}</p>
+                  <p className="text-muted-foreground">{item.time}</p>
+                </div>
+              </>
+            )}
           </motion.div>
         ))}
       </div>
