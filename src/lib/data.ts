@@ -39,7 +39,7 @@ export const eventData: Event = {
       time: '18:00',
       photoUrl: 'https://picsum.photos/seed/reception/800/600',
       imageHint: 'event hall night',
-      mapUrl: 'https://maps.app.goo.gl/f7hN1rT5wJ9k4KxP7',
+      mapUrl: 'https://maps.app.goo.gl/g2d5Yk2z5GqN8Xqf9',
     },
   ],
   program: [
