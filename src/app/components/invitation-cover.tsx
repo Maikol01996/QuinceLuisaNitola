@@ -2,7 +2,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Mail } from 'lucide-react';
 
 type InvitationCoverProps = {
   onOpen: () => void;
@@ -13,27 +12,39 @@ export function InvitationCover({ onOpen }: InvitationCoverProps) {
     <motion.div
       key="cover"
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0, transition: { duration: 0.8 } }}
+      exit={{ opacity: 0, y: -50, transition: { duration: 0.8, ease: 'easeInOut' } }}
       className="fixed inset-0 bg-background z-50 flex items-center justify-center cursor-pointer"
       onClick={onOpen}
     >
+      <div className="absolute inset-0 bg-card opacity-90" />
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1, transition: { delay: 0.3, duration: 0.5 } }}
-        whileHover={{ scale: 1.05 }}
-        className="relative flex flex-col items-center justify-center w-80 h-56 md:w-96 md:h-64 bg-card border-2 border-primary/30 rounded-lg shadow-2xl p-6 text-center"
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1, transition: { delay: 0.3, duration: 0.7, type: 'spring', stiffness: 100 } }}
+        whileHover={{ scale: 1.1, rotate: 2 }}
+        className="relative flex flex-col items-center justify-center text-center"
       >
-        <div className="absolute top-0 left-0 right-0 h-1/2 bg-primary/20 rounded-t-lg" style={{ clipPath: 'polygon(0 0, 100% 0, 50% 100%)' }} />
-        <div className="absolute top-1/2 left-0 w-1/2 h-1/2 bg-primary/10" style={{ clipPath: 'polygon(100% 0, 0 50%, 100% 100%)' }}/>
-        <div className="absolute top-1/2 right-0 w-1/2 h-1/2 bg-primary/10" style={{ clipPath: 'polygon(0 0, 100% 50%, 0 100%)' }}/>
-        
-        <div className="relative z-10 flex flex-col items-center">
-            <Mail className="w-12 h-12 text-primary" />
-            <h1 className="font-headline text-3xl mt-4">Luisa Nitola</h1>
-            <p className="text-lg text-muted-foreground">Mis 15 Años</p>
-            <p className="mt-4 font-bold text-accent animate-pulse">Haz clic para abrir</p>
+        <div className="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
+            {/* Seal shape */}
+            <div className="absolute inset-0 bg-red-600 rounded-full shadow-2xl animate-pulse" style={{ filter: 'url(#wavy)' }}/>
+            <div className="absolute inset-2 bg-red-700 rounded-full" />
+
+            {/* "L" initial */}
+            <span className="relative font-headline text-7xl md:text-9xl text-white/80" style={{ textShadow: '2px 2px 5px rgba(0,0,0,0.3)'}}>
+              L
+            </span>
         </div>
+        <p className="mt-8 font-semibold text-lg text-foreground/80 animate-pulse">Haz clic en el sello para abrir</p>
       </motion.div>
+      
+      {/* SVG filter for the wavy edge effect */}
+      <svg className="absolute w-0 h-0">
+        <defs>
+          <filter id="wavy">
+            <feTurbulence x="0" y="0" baseFrequency="0.02" numOctaves="5" seed="2" />
+            <feDisplacementMap in="SourceGraphic" scale="15" />
+          </filter>
+        </defs>
+      </svg>
     </motion.div>
   );
 }
