@@ -1,10 +1,14 @@
 import type { Event, Guest } from './types';
 
+// Calculate event date to be 31 days from now
+const eventDate = new Date();
+eventDate.setDate(eventDate.getDate() + 31);
+
 export const eventData: Event = {
   id: 'luisa-xv-2025',
   title: 'XV de Luisa Nitola',
   // Use string to avoid timezone issues. This represents Bogota time (UTC-5).
-  date: '2025-12-14T16:00:00',
+  date: eventDate.toISOString(),
   timezone: 'America/Bogota',
   hero: {
     headline: 'Mis 15 Años',

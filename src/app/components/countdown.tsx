@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { intervalToDuration, format } from 'date-fns';
+import { intervalToDuration, format, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { motion } from 'framer-motion';
 
@@ -21,16 +21,18 @@ const timeLabels: Record<TimeUnit, string> = {
 export function Countdown({ date: dateString }: CountdownProps) {
   const [timeLeft, setTimeLeft] = useState<Duration>({});
   const [isClient, setIsClient] = useState(false);
-  
-  // This ensures the date is interpreted consistently across server and client.
-  // By creating the date object here, we avoid timezone issues from SSR.
-  const eventDate = new Date(dateString);
-  const formattedDate = format(eventDate, "eeee, dd 'de' MMMM 'de' yyyy", { locale: es });
-
+  const [eventDate, setEventDate] = useState<Date | null>(null);
 
   useEffect(() => {
     setIsClient(true);
-    
+    // Set the event date to be 31 days from now, only on the client
+    const futureDate = addDays(new Date(), 31);
+    setEventDate(futureDate);
+  }, []);
+
+  useEffect(() => {
+    if (!eventDate) return;
+
     const calculateTimeLeft = () => {
       const now = new Date();
       if (now < eventDate) {
@@ -45,15 +47,17 @@ export function Countdown({ date: dateString }: CountdownProps) {
     const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
-  }, [dateString]);
+  }, [eventDate]);
 
-  if (!isClient) {
+  if (!isClient || !eventDate) {
     return <div className="h-48" />; // Placeholder for SSR to prevent layout shift
   }
+  
+  const formattedDate = format(eventDate, "eeee, dd 'de' MMMM 'de' yyyy", { locale: es });
 
   const isEventTime = Object.values(timeLeft).every(val => val === 0 || val === undefined);
 
-  if (isEventTime) {
+  if (isEventTime && isClient) {
     return (
       <section className="py-12">
         <div className="container mx-auto text-center">
