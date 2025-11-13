@@ -52,8 +52,8 @@ export function DressCode({ dressCode }: DressCodeProps) {
         </motion.p>
         <Card className="max-w-md mx-auto shadow-lg">
           <CardHeader>
-            <CardTitle className="font-headline text-center">Paleta de Colores Sugerida</CardTitle>
-            <CardDescription className="text-center">¡Inspírate con estos tonos para tu atuendo!</CardDescription>
+            <CardTitle className="font-headline text-center">Colores Reservados</CardTitle>
+            <CardDescription className="text-center">Agradecemos no usar estos colores, son exclusivos para los anfitriones.</CardDescription>
           </CardHeader>
           <CardContent>
             <motion.div
