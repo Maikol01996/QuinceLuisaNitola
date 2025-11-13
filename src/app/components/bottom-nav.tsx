@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Calendar, Gift, Music, CheckCircle, ImageIcon } from 'lucide-react';
+import { Home, Calendar, Gift, Music, ImageIcon, CheckCircle } from 'lucide-react';
 
 const navItems = [
   { href: '#', icon: Home, label: 'Inicio' },
