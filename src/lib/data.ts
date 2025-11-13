@@ -101,4 +101,7 @@ export const galleryImages = [
   { src: '/Collage/Collage3.png', alt: 'Collage image 3', hint: 'friends group photo' },
   { src: '/Collage/Collage4.png', alt: 'Collage image 4', hint: 'birthday cake' },
   { src: '/Collage/Collage5.png', alt: 'Collage image 5', hint: 'dancing party' },
+  { src: '/Collage/Collage6.png', alt: 'Collage image 6', hint: 'childhood photo' },
+  { src: '/Collage/Collage7.png', alt: 'Collage image 7', hint: 'travel picture' },
+  { src: '/Collage/Collage8.png', alt: 'Collage image 8', hint: 'funny moment' },
 ];

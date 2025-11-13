@@ -2,48 +2,29 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { galleryImages } from '@/lib/data';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, scale: 0.5, rotate: -15 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    rotate: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 100,
-      damping: 10,
-    },
-  },
-};
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
 
 const textVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 }
 
+// Define positions for collage images. These can be adjusted for artistry.
+const imagePositions = [
+  { top: '5%', left: '5%', width: '30%', rotate: -8 },
+  { top: '10%', right: '8%', width: '35%', rotate: 5 },
+  { bottom: '15%', left: '10%', width: '28%', rotate: 10 },
+  { bottom: '8%', right: '5%', width: '32%', rotate: -5 },
+  { top: '45%', left: '38%', width: '25%', rotate: 2 },
+  { top: '60%', left: '5%', width: '25%', rotate: -12 },
+  { bottom: '5%', left: '45%', width: '30%', rotate: 8 },
+  { top: '30%', right: '2%', width: '28%', rotate: -7 },
+];
+
 export function PhotoGallery() {
   const [mainImage, ...collageImages] = galleryImages;
-
-  // Define positions for collage images. These can be adjusted.
-  const imagePositions = [
-    { top: '5%', left: '5%', width: '30%', rotate: -8 },
-    { top: '10%', right: '8%', width: '35%', rotate: 5 },
-    { bottom: '15%', left: '10%', width: '28%', rotate: 10 },
-    { bottom: '8%', right: '5%', width: '32%', rotate: -5 },
-    { top: '40%', left: '35%', width: '30%', rotate: 2 },
-  ];
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   return (
     <section id="galeria" className="container mx-auto px-4 py-16">
@@ -68,11 +49,10 @@ export function PhotoGallery() {
       </motion.div>
 
       <motion.div
-        variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
-        className="relative max-w-4xl mx-auto aspect-[4/3] md:aspect-video"
+        className="relative max-w-4xl mx-auto aspect-[4/3] md:aspect-video group"
       >
         {/* Main Background Image */}
         {mainImage && (
@@ -90,35 +70,47 @@ export function PhotoGallery() {
               priority
               className="object-cover"
             />
-             <div className="absolute inset-0 bg-black/10"></div>
+             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-300"></div>
           </motion.div>
         )}
 
         {/* Overlayed Collage Images */}
-        {collageImages.slice(0, 5).map((image, index) => (
-          <motion.div
-            key={index}
-            variants={itemVariants}
-            className="absolute rounded-md overflow-hidden border-4 border-white shadow-lg"
-            style={{
-              top: imagePositions[index % imagePositions.length].top,
-              left: imagePositions[index % imagePositions.length].left,
-              right: imagePositions[index % imagePositions.length].right,
-              bottom: imagePositions[index % imagePositions.length].bottom,
-              width: imagePositions[index % imagePositions.length].width,
-              transform: `rotate(${imagePositions[index % imagePositions.length].rotate}deg)`,
-            }}
-          >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              data-ai-hint={image.hint}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 30vw, 20vw"
-            />
-          </motion.div>
-        ))}
+        {collageImages.map((image, index) => {
+            const position = imagePositions[index % imagePositions.length];
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.5, rotate: position.rotate - 10, x: (Math.random() - 0.5) * 200 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: position.rotate, x: 0 }}
+                transition={{ type: 'spring', stiffness: 80, damping: 12, delay: 0.5 + index * 0.1 }}
+                whileHover={{ scale: 1.15, zIndex: 10, rotate: position.rotate }}
+                onHoverStart={() => setHoveredIndex(index)}
+                onHoverEnd={() => setHoveredIndex(null)}
+                className="absolute rounded-md overflow-hidden border-4 border-white shadow-lg cursor-pointer"
+                style={{
+                  top: position.top,
+                  left: position.left,
+                  right: position.right,
+                  bottom: position.bottom,
+                  width: position.width,
+                  zIndex: hoveredIndex === index ? 10 : 1,
+                  transform: `rotate(${position.rotate}deg)`,
+                }}
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  data-ai-hint={image.hint}
+                  fill
+                  className={cn(
+                      "object-cover transition-all duration-300",
+                      hoveredIndex !== null && hoveredIndex !== index ? 'opacity-50' : 'opacity-100'
+                  )}
+                  sizes="(max-width: 768px) 30vw, 20vw"
+                />
+              </motion.div>
+            )
+        })}
       </motion.div>
     </section>
   );
