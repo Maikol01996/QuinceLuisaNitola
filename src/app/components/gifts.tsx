@@ -1,5 +1,5 @@
 'use client';
-import { Suspense } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,6 +12,13 @@ const EnvelopeModel = dynamic(() => import('./envelope-model').then(mod => mod.E
 });
 
 export function Gifts() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    // This ensures the component only renders on the client side
+    setIsClient(true);
+  }, []);
+
   return (
     <section id="regalos" className="container mx-auto px-4">
       <motion.div
@@ -32,7 +39,7 @@ export function Gifts() {
             <CardHeader>
               <div className="mx-auto h-48 w-48">
                 <Suspense fallback={<Skeleton className="h-full w-full rounded-full" />}>
-                   <EnvelopeModel modelPath="/Objeto3D/CartaLluviaSobres.glb" />
+                   {isClient && <EnvelopeModel modelPath="/Objeto3D/CartaLluviaSobres.glb" />}
                 </Suspense>
               </div>
               <CardTitle className="flex items-center justify-center gap-2 font-headline text-2xl">
