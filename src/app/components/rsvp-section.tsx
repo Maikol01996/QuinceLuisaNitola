@@ -79,9 +79,9 @@ export function RsvpSection() {
   function generateWhatsAppMessage(data: RsvpFormValues) {
     const phoneNumber = '573204264195';
     let message = '';
+    const attendeeList = data.attendees?.map(a => `• ${a.name}`).join('\n') || '';
 
     if (data.attending === 'yes') {
-      const attendeeList = data.attendees?.map(a => `• ${a.name}`).join('\n') || '• No especificados';
       message = `🎀 Confirmación de asistencia a los 15 de Luisa 🎀\n\n` +
                 `Hola, soy ${data.contactName} 😊\n` +
                 `Te confirmo nuestra asistencia a la celebración de los 15 años de Luisa.\n\n` +
@@ -94,6 +94,7 @@ export function RsvpSection() {
         message = `🎀 Notificación de asistencia a los 15 de Luisa 🎀\n\n` +
               `Hola, soy ${data.contactName} 😊\n` +
               `Con mucha pena te contamos que no podremos asistir a la celebración.\n\n` +
+              (attendeeList.trim() ? `👥 Quiénes no asisten:\n${attendeeList}\n\n` : '') +
               `💌 Mensaje para Luisa:\n${data.messageForLuisa || 'Te deseamos un día absolutamente maravilloso. ¡Muchos éxitos!'}\n\n` +
               `¡Los recordaremos en este día tan especial! 😔`;
     }
@@ -258,7 +259,7 @@ export function RsvpSection() {
                   )}
                 />
 
-                {(watchAttending === 'yes' || watchAttending === 'no') && (
+                {watchAttending && (
                   <div className="space-y-4 animate-in fade-in duration-500">
                     <Separator />
                     <FormField control={form.control} name="contactName" render={({ field }) => (
@@ -271,21 +272,24 @@ export function RsvpSection() {
                     />
                   </div>
                 )}
-
-                {watchAttending === 'yes' && (
+                
+                {watchAttending && (
                   <div className="space-y-8 animate-in fade-in duration-500">
-                    
-                    <FormField control={form.control} name="contactEmail" render={({ field }) => (
+                    {watchAttending === 'yes' && (
+                       <FormField control={form.control} name="contactEmail" render={({ field }) => (
                         <FormItem>
                           <FormLabel>Tu correo electrónico (Opcional)</FormLabel>
                           <FormControl><Input placeholder="email@ejemplo.com" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )} />
+                    )}
 
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                         <h3 className="text-lg font-semibold flex items-center gap-2"><Users /> Quiénes Asisten</h3>
+                         <h3 className="text-lg font-semibold flex items-center gap-2"><Users /> 
+                           {watchAttending === 'yes' ? 'Quiénes Asisten' : 'Quiénes no podrán asistir (Opcional)'}
+                         </h3>
                          <Button type="button" variant="outline" size="sm" onClick={() => append({ name: '' })}><PlusCircle className="mr-2 h-4 w-4" />Añadir</Button>
                       </div>
                       {fields.map((field, index) => (
@@ -297,7 +301,7 @@ export function RsvpSection() {
                             <FormItem>
                               <div className="flex gap-2">
                                 <FormControl>
-                                  <Input placeholder={`Nombre del asistente ${index + 1}`} {...field} />
+                                  <Input placeholder={`Nombre ${index + 1}`} {...field} />
                                 </FormControl>
                                 {fields.length > 1 && (
                                   <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
@@ -310,38 +314,37 @@ export function RsvpSection() {
                           )}
                         />
                       ))}
-                      {form.formState.errors.attendees && (
+                      {form.formState.errors.attendees && watchAttending === 'yes' && (
                           <p className="text-sm font-medium text-destructive">{form.formState.errors.attendees.message}</p>
                       )}
                     </div>
-
-                    <FormField control={form.control} name="allergies" render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Alergias o restricciones alimentarias</FormLabel>
-                          <FormControl><Textarea placeholder="Ej: alergia a los frutos secos" {...field} /></FormControl>
-                        </FormItem>
-                      )}
-                    />
+                    
+                    {watchAttending === 'yes' && (
+                      <FormField control={form.control} name="allergies" render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Alergias o restricciones alimentarias</FormLabel>
+                            <FormControl><Textarea placeholder="Ej: alergia a los frutos secos" {...field} /></FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    )}
                     
                     <FormField control={form.control} name="messageForLuisa" render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Mensaje para Luisa</FormLabel>
-                          <FormControl><Textarea placeholder="¡Déjale un bonito mensaje a la quinceañera!" {...field} /></FormControl>
+                          <FormLabel>
+                            {watchAttending === 'yes' 
+                              ? 'Mensaje para Luisa' 
+                              : 'Lamentamos que no puedas venir. Si quieres, deja un mensaje para Luisa.'}
+                          </FormLabel>
+                          <FormControl>
+                            <Textarea 
+                              placeholder={watchAttending === 'yes' ? "¡Déjale un bonito mensaje a la quinceañera!" : "Te echaremos de menos..."}
+                              {...field} />
+                          </FormControl>
                         </FormItem>
                       )}
                     />
                   </div>
-                )}
-                
-                {watchAttending === 'no' && (
-                    <div className="animate-in fade-in duration-500">
-                        <FormField control={form.control} name="messageForLuisa" render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Lamentamos que no puedas venir. Si quieres, deja un mensaje para Luisa.</FormLabel>
-                                <FormControl><Textarea placeholder="Te echaremos de menos..." {...field} /></FormControl>
-                            </FormItem>
-                        )} />
-                    </div>
                 )}
                 
                 {watchAttending && (
