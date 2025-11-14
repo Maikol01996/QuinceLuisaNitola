@@ -25,7 +25,6 @@ import {
 } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { PlusCircle, Trash2, Users, Calendar, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -35,14 +34,13 @@ import { Label } from '@/components/ui/label';
 const rsvpSchema = z.object({
   attending: z.enum(['yes', 'no'], { required_error: 'Por favor selecciona una opción.' }),
   contactName: z.string().min(1, 'Tu nombre es requerido.'),
-  contactEmail: z.string().email('Por favor ingresa un email válido.'),
+  contactEmail: z.string().email('Por favor ingresa un email válido.').optional().or(z.literal('')),
   attendees: z.array(
     z.object({
       name: z.string().min(1, 'El nombre del asistente es requerido.'),
     })
   ).optional(),
   allergies: z.string().optional(),
-  needsBus: z.boolean().default(false),
   messageForLuisa: z.string().optional(),
 }).refine(data => {
   if (data.attending === 'yes') {
@@ -67,7 +65,6 @@ export function RsvpSection() {
       contactName: '',
       contactEmail: '',
       attendees: [{ name: '' }],
-      needsBus: false,
     },
   });
 
@@ -78,12 +75,38 @@ export function RsvpSection() {
 
   const watchAttending = form.watch('attending');
 
+  function generateWhatsAppMessage(data: RsvpFormValues) {
+    const phoneNumber = '573204264195';
+    let message = '';
+
+    if (data.attending === 'yes') {
+      const attendeeNames = data.attendees?.map(a => a.name).join(', ') || 'N/A';
+      message = `🎉 ¡Confirmación de Asistencia para los 15 de Luisa! 🎉\n\n` +
+                `*Nombre de Contacto:* ${data.contactName}\n` +
+                `*Correo:* ${data.contactEmail || 'No proporcionado'}\n` +
+                `*Asistentes (${data.attendees?.length || 0}):* ${attendeeNames}\n\n` +
+                `*Alergias/Restricciones:* ${data.allergies || 'Ninguna'}\n` +
+                `*Mensaje para Luisa:* ${data.messageForLuisa || '¡Nos vemos en la fiesta!'}\n\n` +
+                `¡Gracias por confirmar!`;
+    } else { // 'no'
+      message = `😔 Notificación de Asistencia para los 15 de Luisa 😔\n\n` +
+                `Lamentablemente, *${data.contactName}* no podrá asistir.\n\n` +
+                `*Mensaje para Luisa:* ${data.messageForLuisa || 'Te echaremos de menos. ¡Muchos éxitos en tu día!'}`;
+    }
+
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  }
+
   async function onSubmit(data: RsvpFormValues) {
-    // Simulate server action
-    console.log(data);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    generateWhatsAppMessage(data);
     setIsSubmitted(true);
-    form.reset();
+    // We don't reset the form immediately to allow the user to see the data
+    // and in case they need to resend. The success screen will handle the next step.
+    toast({
+      title: "¡Gracias por responder!",
+      description: "Se ha abierto WhatsApp para que envíes tu mensaje.",
+    });
   }
 
   if (isSubmitted) {
@@ -92,11 +115,14 @@ export function RsvpSection() {
         <Card className="max-w-lg mx-auto">
           <CardHeader>
             <Lottie animationData={successAnimation} loop={false} style={{ height: 150, width: 150, margin: '0 auto' }} />
-            <CardTitle className="font-headline text-3xl">¡Confirmación Recibida!</CardTitle>
-            <CardDescription>Gracias por responder. ¡Nos vemos en la fiesta!</CardDescription>
+            <CardTitle className="font-headline text-3xl">¡Mensaje listo!</CardTitle>
+            <CardDescription>Gracias por responder. Por favor, envía el mensaje en WhatsApp para finalizar.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>Puedes agregar el evento a tu calendario para no olvidarlo.</p>
+             <p>Si la ventana de WhatsApp no se abrió, puedes hacer clic de nuevo en el botón de abajo.</p>
+             <Button onClick={form.handleSubmit(onSubmit)}>Reintentar envío a WhatsApp</Button>
+            <Separator className="my-4" />
+            <p className="text-sm text-muted-foreground">Puedes agregar el evento a tu calendario para no olvidarlo.</p>
             <div className="flex gap-4 justify-center">
               <Button variant="outline"><Calendar className="mr-2 h-4 w-4" /> Google</Button>
               <Button variant="outline"><Calendar className="mr-2 h-4 w-4" /> Apple</Button>
@@ -159,26 +185,30 @@ export function RsvpSection() {
                   )}
                 />
 
+                {(watchAttending === 'yes' || watchAttending === 'no') && (
+                  <div className="space-y-4 animate-in fade-in duration-500">
+                    <Separator />
+                    <FormField control={form.control} name="contactName" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Tu nombre completo (o nombre de la familia)</FormLabel>
+                          <FormControl><Input placeholder="Nombre y Apellido" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} 
+                    />
+                  </div>
+                )}
+
                 {watchAttending === 'yes' && (
                   <div className="space-y-8 animate-in fade-in duration-500">
-                    <Separator />
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold">Información de Contacto</h3>
-                      <FormField control={form.control} name="contactName" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Tu nombre completo</FormLabel>
-                            <FormControl><Input placeholder="Nombre y Apellido" {...field} /></FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-                      <FormField control={form.control} name="contactEmail" render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Tu correo electrónico</FormLabel>
-                            <FormControl><Input placeholder="email@ejemplo.com" {...field} /></FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )} />
-                    </div>
+                    
+                    <FormField control={form.control} name="contactEmail" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Tu correo electrónico (Opcional)</FormLabel>
+                          <FormControl><Input placeholder="email@ejemplo.com" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
 
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
@@ -217,17 +247,6 @@ export function RsvpSection() {
                         </FormItem>
                       )}
                     />
-
-                    <FormField control={form.control} name="needsBus" render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                          <div className="space-y-0.5">
-                            <FormLabel className="text-base">¿Necesitas transporte?</FormLabel>
-                            <p className="text-sm text-muted-foreground">Habrá un bus disponible desde el punto de encuentro.</p>
-                          </div>
-                          <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                        </FormItem>
-                      )}
-                    />
                     
                     <FormField control={form.control} name="messageForLuisa" render={({ field }) => (
                         <FormItem>
@@ -241,7 +260,6 @@ export function RsvpSection() {
                 
                 {watchAttending === 'no' && (
                     <div className="animate-in fade-in duration-500">
-                        <Separator />
                         <FormField control={form.control} name="messageForLuisa" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Lamentamos que no puedas venir. Si quieres, deja un mensaje para Luisa.</FormLabel>
@@ -253,7 +271,7 @@ export function RsvpSection() {
                 
                 {watchAttending && (
                    <Button type="submit" size="lg" className="w-full" disabled={form.formState.isSubmitting}>
-                    {form.formState.isSubmitting ? 'Enviando...' : 'Enviar Confirmación'}
+                    {form.formState.isSubmitting ? 'Enviando...' : 'Enviar Confirmación por WhatsApp'}
                   </Button>
                 )}
               </form>
