@@ -81,18 +81,21 @@ export function RsvpSection() {
     let message = '';
 
     if (data.attending === 'yes') {
-      const attendeeNames = data.attendees?.map(a => a.name).join(', ') || 'N/A';
-      message = `🎉 ¡Confirmación de Asistencia para los 15 de Luisa! 🎉\n\n` +
-                `*Nombre de Contacto:* ${data.contactName}\n` +
-                `*Correo:* ${data.contactEmail || 'No proporcionado'}\n` +
-                `*Asistentes (${data.attendees?.length || 0}):* ${attendeeNames}\n\n` +
-                `*Alergias/Restricciones:* ${data.allergies || 'Ninguna'}\n` +
-                `*Mensaje para Luisa:* ${data.messageForLuisa || '¡Nos vemos en la fiesta!'}\n\n` +
-                `¡Gracias por confirmar!`;
+      const attendeeList = data.attendees?.map(a => `• ${a.name}`).join('\n') || '• No especificados';
+      message = `🎀 Confirmación de asistencia a los 15 de Luisa 🎀\n\n` +
+                `Hola, soy ${data.contactName} 😊\n` +
+                `Te confirmo nuestra asistencia a la celebración de los 15 años de Luisa.\n\n` +
+                `👥 Asistentes (${data.attendees?.length || 0})\n${attendeeList}\n\n` +
+                `📧 Correo de contacto: ${data.contactEmail || 'No proporcionado'}\n\n` +
+                `🍽️ Alergias o restricciones alimentarias: ${data.allergies || 'Ninguna'}\n\n` +
+                `💌 Mensaje para Luisa:\n${data.messageForLuisa || '¡Nos vemos en la fiesta!'}\n\n` +
+                `¡Muchas gracias por la invitación, nos vemos en la fiesta! 🎉`;
     } else { // 'no'
-      message = `😔 Notificación de Asistencia para los 15 de Luisa 😔\n\n` +
-                `Lamentablemente, *${data.contactName}* no podrá asistir.\n\n` +
-                `*Mensaje para Luisa:* ${data.messageForLuisa || 'Te echaremos de menos. ¡Muchos éxitos en tu día!'}`;
+        message = `🎀 Notificación de asistencia a los 15 de Luisa 🎀\n\n` +
+              `Hola, soy ${data.contactName} 😊\n` +
+              `Lamento informarte que no podremos asistir a la celebración.\n\n` +
+              `💌 Mensaje para Luisa:\n${data.messageForLuisa || 'Te deseamos un día maravilloso. ¡Muchos éxitos!'}\n\n` +
+              `¡Te echaremos de menos! 😔`;
     }
 
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
@@ -115,6 +118,8 @@ export function RsvpSection() {
       contactName: '',
       contactEmail: '',
       attendees: [{ name: '' }],
+      allergies: '',
+      messageForLuisa: '',
     });
   }
 
@@ -345,3 +350,5 @@ export function RsvpSection() {
     </section>
   );
 }
+
+    
