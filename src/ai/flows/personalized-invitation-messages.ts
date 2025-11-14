@@ -1,4 +1,3 @@
-'use server';
 /**
  * @fileOverview Generates personalized invitation messages for guests using AI.
  *
@@ -7,8 +6,7 @@
  * - PersonalizedInvitationMessageOutput - The return type for the generatePersonalizedInvitationMessage function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {z} from 'zod';
 
 const PersonalizedInvitationMessageInputSchema = z.object({
   guestName: z.string().describe('The name of the guest.'),
@@ -30,33 +28,8 @@ export type PersonalizedInvitationMessageOutput = z.infer<typeof PersonalizedInv
 export async function generatePersonalizedInvitationMessage(
   input: PersonalizedInvitationMessageInput
 ): Promise<PersonalizedInvitationMessageOutput> {
-  return personalizedInvitationMessageFlow(input);
+  // Static/dummy version for GitHub Pages (no server actions)
+  return {
+    personalizedMessage: `¡Hola ${input.guestName}! Nos encantaría que nos acompañes a celebrar el ${input.eventName} el día ${input.eventDate} a las ${input.eventTime}. ¡Tu presencia es el mejor regalo! Esperamos contar contigo.`,
+  };
 }
-
-const personalizedInvitationMessagePrompt = ai.definePrompt({
-  name: 'personalizedInvitationMessagePrompt',
-  input: {schema: PersonalizedInvitationMessageInputSchema},
-  output: {schema: PersonalizedInvitationMessageOutputSchema},
-  prompt: `You are an expert invitation message writer. You will generate a personalized invitation message for a guest to an event.
-
-  Event Name: {{{eventName}}}
-  Event Date: {{{eventDate}}}
-  Event Time: {{{eventTime}}}
-  Guest Name: {{{guestName}}}
-  Special Notes: {{{specialNotes}}}
-
-  Write a warm and inviting message, no more than 100 words, that encourages the guest to RSVP. Make the guest feel special and valued.
-  `,
-});
-
-const personalizedInvitationMessageFlow = ai.defineFlow(
-  {
-    name: 'personalizedInvitationMessageFlow',
-    inputSchema: PersonalizedInvitationMessageInputSchema,
-    outputSchema: PersonalizedInvitationMessageOutputSchema,
-  },
-  async input => {
-    const {output} = await personalizedInvitationMessagePrompt(input);
-    return output!;
-  }
-);
