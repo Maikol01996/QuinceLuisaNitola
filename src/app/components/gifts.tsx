@@ -4,10 +4,11 @@ import { motion } from 'framer-motion';
 import { CreditCard } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import dynamic from 'next/dynamic';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const EnvelopeModel = dynamic(() => import('./envelope-model').then(mod => mod.EnvelopeModel), {
   ssr: false,
-  loading: () => <div className="h-full w-full bg-secondary rounded-full animate-pulse" />
+  loading: () => <Skeleton className="h-full w-full rounded-full" />
 });
 
 export function Gifts() {
@@ -30,7 +31,7 @@ export function Gifts() {
           <Card className="text-center">
             <CardHeader>
               <div className="mx-auto h-48 w-48">
-                <Suspense fallback={<div className="h-full w-full bg-secondary rounded-full animate-pulse" />}>
+                <Suspense fallback={<Skeleton className="h-full w-full rounded-full" />}>
                    <EnvelopeModel modelPath="/Objeto3D/CartaLluviaSobres.glb" />
                 </Suspense>
               </div>
