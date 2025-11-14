@@ -62,10 +62,10 @@ export const eventData: Event = {
     ladies: 'Vestido largo o coctel',
     gentlemen: 'Traje formal',
     reservedColors: [
-        { name: 'Rosado', value: '#E83E8C' },
-        { name: 'Verde', value: '#28A745' },
-        { name: 'Dorado', value: '#FFC107' },
-        { name: 'Morado', value: '#6F42C1' },
+        { name: 'Rosado', value: '#E6A8B8' },
+        { name: 'Verde', value: '#A3C9A8' },
+        { name: 'Dorado', value: '#F3D6A2' },
+        { name: 'Morado', value: '#C3B1E1' },
       ]
   },
   gifts: {
