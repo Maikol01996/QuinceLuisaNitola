@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import type { DressCode as DressCodeType } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 type DressCodeProps = {
   dressCode: DressCodeType;
@@ -56,7 +57,7 @@ export function DressCode({ dressCode }: DressCodeProps) {
         >
           {dressCode.label}
         </motion.p>
-        <Card className="max-w-md mx-auto shadow-lg bg-transparent border-none">
+        <Card className="max-w-xl mx-auto shadow-lg bg-transparent border-none">
           <CardContent className="p-0">
             <motion.div
               className="space-y-8"
@@ -65,20 +66,46 @@ export function DressCode({ dressCode }: DressCodeProps) {
               whileInView="visible"
               viewport={{ once: true, amount: 0.8 }}
             >
-              <motion.div variants={itemVariants} className="flex items-center gap-6">
-                <DressIcon />
-                <div className="text-left">
-                  <h3 className="font-semibold text-xl">Damas:</h3>
-                  <p className="text-lg text-muted-foreground">{dressCode.ladies}</p>
-                </div>
-              </motion.div>
-              <motion.div variants={itemVariants} className="flex items-center gap-6">
-                <TuxedoIcon />
-                <div className="text-left">
-                  <h3 className="font-semibold text-xl">Caballeros:</h3>
-                  <p className="text-lg text-muted-foreground">{dressCode.gentlemen}</p>
-                </div>
-              </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <motion.div variants={itemVariants} className="flex items-center gap-6">
+                  <DressIcon />
+                  <div className="text-left">
+                    <h3 className="font-semibold text-xl">Damas:</h3>
+                    <p className="text-lg text-muted-foreground">{dressCode.ladies}</p>
+                  </div>
+                </motion.div>
+                <motion.div variants={itemVariants} className="flex items-center gap-6">
+                  <TuxedoIcon />
+                  <div className="text-left">
+                    <h3 className="font-semibold text-xl">Caballeros:</h3>
+                    <p className="text-lg text-muted-foreground">{dressCode.gentlemen}</p>
+                  </div>
+                </motion.div>
+              </div>
+
+            {dressCode.reservedColors && dressCode.reservedColors.length > 0 && (
+                <>
+                <Separator className="my-10" />
+                <motion.div variants={itemVariants} className="space-y-4 text-center">
+                    <h3 className="font-semibold text-xl">Colores Reservados</h3>
+                    <p className="text-muted-foreground">
+                        Estos colores son para los anfitriones, por favor evita usarlos.
+                    </p>
+                    <div className="flex justify-center items-center gap-4 pt-2">
+                    {dressCode.reservedColors.map((color) => (
+                        <div key={color.name} className="flex flex-col items-center gap-2">
+                            <div
+                                className="h-16 w-16 rounded-full border-2 border-border flex items-center justify-center text-xs font-semibold text-white"
+                                style={{ backgroundColor: color.value, textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
+                            >
+                                {color.name}
+                            </div>
+                        </div>
+                    ))}
+                    </div>
+                </motion.div>
+                </>
+            )}
             </motion.div>
           </CardContent>
         </Card>

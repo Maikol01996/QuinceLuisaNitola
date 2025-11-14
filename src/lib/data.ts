@@ -60,7 +60,13 @@ export const eventData: Event = {
   dressCode: {
     label: 'Etiqueta (Formal)',
     ladies: 'Vestido largo o coctel',
-    gentlemen: 'Traje formal'
+    gentlemen: 'Traje formal',
+    reservedColors: [
+        { name: 'Rosado', value: '#E83E8C' },
+        { name: 'Verde', value: '#28A745' },
+        { name: 'Dorado', value: '#FFC107' },
+        { name: 'Morado', value: '#6F42C1' },
+      ]
   },
   gifts: {
     bank: {
