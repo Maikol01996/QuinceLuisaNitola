@@ -93,9 +93,9 @@ export function RsvpSection() {
     } else { // 'no'
         message = `🎀 Notificación de asistencia a los 15 de Luisa 🎀\n\n` +
               `Hola, soy ${data.contactName} 😊\n` +
-              `Lamento informarte que no podremos asistir a la celebración.\n\n` +
-              `💌 Mensaje para Luisa:\n${data.messageForLuisa || 'Te deseamos un día maravilloso. ¡Muchos éxitos!'}\n\n` +
-              `¡Te echaremos de menos! 😔`;
+              `Con mucha pena te contamos que no podremos asistir a la celebración.\n\n` +
+              `💌 Mensaje para Luisa:\n${data.messageForLuisa || 'Te deseamos un día absolutamente maravilloso. ¡Muchos éxitos!'}\n\n` +
+              `¡Los recordaremos en este día tan especial! 😔`;
     }
 
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
@@ -127,7 +127,12 @@ export function RsvpSection() {
   const getCalendarLinks = () => {
     const eventDate = new Date(eventData.date);
     const ceremonyStartTime = eventData.program.find(p => p.icon === 'Church')?.time;
-    const celebrationEndTime = eventData.program.find(p => p.icon === 'Moon')?.time;
+    // Let's assume the event ends roughly 8 hours after it starts if no end time is specified
+    let celebrationEndTime;
+    if (eventData.program && eventData.program.length > 0) {
+      celebrationEndTime = eventData.program[eventData.program.length - 1].time;
+    }
+
 
     if (!ceremonyStartTime || !celebrationEndTime) return { google: '#', ics: '#' };
 
@@ -159,7 +164,7 @@ export function RsvpSection() {
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
       'BEGIN:VEVENT',
-      `URL:${document.location.href}`,
+      `URL:${typeof window !== 'undefined' ? window.location.href : ''}`,
       `DTSTART:${startTimeUtc}`,
       `DTEND:${endTimeUtc}`,
       `SUMMARY:${eventData.title}`,
@@ -350,5 +355,3 @@ export function RsvpSection() {
     </section>
   );
 }
-
-    
