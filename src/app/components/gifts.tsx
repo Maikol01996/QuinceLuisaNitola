@@ -1,9 +1,9 @@
 'use client';
+import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Lottie from 'lottie-react';
-import envelopeAnimation from '@/lib/envelope-animation.json';
+import { EnvelopeModel } from './envelope-model';
 
 export function Gifts() {
   return (
@@ -13,28 +13,39 @@ export function Gifts() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 0.5 }}
+        className="text-center"
       >
-        <h2 className="font-headline text-4xl md:text-5xl text-center mb-4">
+        <h2 className="font-headline text-4xl md:text-5xl mb-4">
           Regalos
         </h2>
-        <p className="text-center text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+        <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
           Tu presencia es nuestro mayor regalo, ¡muchas gracias por acompañarnos!
         </p>
         <div className="max-w-md mx-auto">
-            <Card className="text-center">
-                <CardHeader>
-                    <div className="mx-auto h-48 w-48">
-                        <Lottie animationData={envelopeAnimation} loop={true} />
-                    </div>
-                    <CardTitle className="flex items-center justify-center gap-2 font-headline text-2xl">
-                        <CreditCard className="text-accent" />
-                        Lluvia de Sobres
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-muted-foreground">Si deseas obsequiarnos algo, habrá un espacio disponible para la tradicional lluvia de sobres.</p>
-                </CardContent>
-            </Card>
+          <Card className="text-center">
+            <CardHeader>
+              <div className="mx-auto h-48 w-48">
+                <Suspense fallback={<div className="h-full w-full bg-secondary rounded-full animate-pulse" />}>
+                   <EnvelopeModel modelPath="/Objeto3D/CartaLluviaSobres.glb" />
+                </Suspense>
+              </div>
+              <CardTitle className="flex items-center justify-center gap-2 font-headline text-2xl">
+                <CreditCard className="text-accent" />
+                Lluvia de Sobres
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <motion.p
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true, amount: 0.8 }}
+                 transition={{ duration: 0.8, delay: 0.3 }}
+                 className="text-muted-foreground"
+              >
+                Gracias por ser parte de este momento tan especial.
+              </motion.p>
+            </CardContent>
+          </Card>
         </div>
       </motion.div>
     </section>
