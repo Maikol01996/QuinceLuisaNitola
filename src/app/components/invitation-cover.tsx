@@ -2,19 +2,27 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useAudio } from './audio-provider';
 
 type InvitationCoverProps = {
   onOpen: () => void;
 };
 
 export function InvitationCover({ onOpen }: InvitationCoverProps) {
+  const { play } = useAudio();
+
+  const handleOpen = () => {
+    play();
+    onOpen();
+  };
+
   return (
     <motion.div
       key="cover"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, y: -50, transition: { duration: 0.8, ease: 'easeInOut' } }}
       className="fixed inset-0 bg-background z-50 flex items-center justify-center cursor-pointer"
-      onClick={onOpen}
+      onClick={handleOpen}
     >
       <div className="absolute inset-0 bg-card opacity-90" />
       <motion.div
