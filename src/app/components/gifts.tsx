@@ -1,11 +1,13 @@
 'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Gift, Copy, CreditCard } from 'lucide-react';
+import { Copy, CreditCard } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import type { GiftInfo } from '@/lib/types';
+import Lottie from 'lottie-react';
+import envelopeAnimation from '@/lib/envelope-animation.json';
 
 type GiftsProps = {
   gifts: GiftInfo;
@@ -35,74 +37,58 @@ export function Gifts({ gifts }: GiftsProps) {
           Regalos
         </h2>
         <p className="text-center text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-          Tu presencia es mi mayor regalo, pero si deseas obsequiarme algo, aquí tienes algunas opciones.
+          Tu presencia es mi mayor regalo, pero si deseas obsequiarme algo, puedes hacerlo a través de la tradicional lluvia de sobres.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {gifts.registryUrl && gifts.registryLabel && (
+        <div className="max-w-md mx-auto">
             <Card className="text-center">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-center gap-2 font-headline text-2xl">
-                  <Gift className="text-primary" />
-                  Mesa de Regalos
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4">{gifts.registryLabel}</p>
-                <Button asChild>
-                  <a href={gifts.registryUrl} target="_blank" rel="noopener noreferrer">
-                    Ver Opciones
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-
-          <Card className="text-center">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-center gap-2 font-headline text-2xl">
-                <CreditCard className="text-accent" />
-                Lluvia de Sobres
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {!showBankDetails ? (
-                <>
-                  <p className="mb-4">Si prefieres, puedes dar tu obsequio en efectivo.</p>
-                  <Button variant="outline" onClick={() => setShowBankDetails(true)}>
-                    Ver datos para transferencia
-                  </Button>
-                </>
-              ) : (
-                <div className="space-y-3 text-left">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-semibold">{gifts.bank.bankName}</p>
-                      <p className="text-sm text-muted-foreground">Banco</p>
+                <CardHeader>
+                    <div className="mx-auto h-48 w-48">
+                        <Lottie animationData={envelopeAnimation} loop={true} />
                     </div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-semibold">{gifts.bank.accountHolder}</p>
-                      <p className="text-sm text-muted-foreground">Titular</p>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-semibold font-mono">{gifts.bank.acctOrIban}</p>
-                      <p className="text-sm text-muted-foreground">Cuenta de Ahorros</p>
-                    </div>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      onClick={() => handleCopy(gifts.bank.acctOrIban, 'Número de cuenta')}
-                    >
-                      <Copy className="h-4 w-4" />
+                    <CardTitle className="flex items-center justify-center gap-2 font-headline text-2xl">
+                        <CreditCard className="text-accent" />
+                        Lluvia de Sobres
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                {!showBankDetails ? (
+                    <>
+                    <p className="mb-4">Si lo deseas, puedes realizar una transferencia bancaria.</p>
+                    <Button variant="outline" onClick={() => setShowBankDetails(true)}>
+                        Ver datos para transferencia
                     </Button>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                    </>
+                ) : (
+                    <div className="space-y-3 text-left">
+                    <div className="flex justify-between items-center">
+                        <div>
+                        <p className="font-semibold">{gifts.bank.bankName}</p>
+                        <p className="text-sm text-muted-foreground">Banco</p>
+                        </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                        <div>
+                        <p className="font-semibold">{gifts.bank.accountHolder}</p>
+                        <p className="text-sm text-muted-foreground">Titular</p>
+                        </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                        <div>
+                        <p className="font-semibold font-mono">{gifts.bank.acctOrIban}</p>
+                        <p className="text-sm text-muted-foreground">Cuenta de Ahorros</p>
+                        </div>
+                        <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => handleCopy(gifts.bank.acctOrIban, 'Número de cuenta')}
+                        >
+                        <Copy className="h-4 w-4" />
+                        </Button>
+                    </div>
+                    </div>
+                )}
+                </CardContent>
+            </Card>
         </div>
       </motion.div>
     </section>
