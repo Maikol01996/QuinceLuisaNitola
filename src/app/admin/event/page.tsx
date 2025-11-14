@@ -61,8 +61,8 @@ export default function EventEditorPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: eventData.title,
-      // 👇 aquí ya no usamos toISOString
-      date: formatDateTimeLocal(eventData.date),
+      // 👇 FIX: Create a Date object from the string before formatting
+      date: formatDateTimeLocal(new Date(eventData.date)),
       headline: eventData.hero.headline,
       hashtag: eventData.hashtag,
       venues: eventData.venues.map((v) => ({

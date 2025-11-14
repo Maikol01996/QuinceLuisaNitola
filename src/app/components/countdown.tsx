@@ -1,8 +1,10 @@
+
 'use client';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { motion } from 'framer-motion';
+import { eventData } from '@/lib/data';
 
 type TimeUnit = 'days' | 'hours' | 'minutes' | 'seconds';
 
@@ -21,11 +23,6 @@ type CountdownTime = {
   seconds: number;
 };
 
-// 🎯 Fecha fija: 14 diciembre 2025, 19:00 (tu ejemplo)
-function getFixedTargetDate() {
-  return new Date(2025, 11, 14, 19, 0, 0);
-}
-
 export function Countdown() {
   const [timeLeft, setTimeLeft] = useState<CountdownTime>({
     days: 0,
@@ -35,25 +32,17 @@ export function Countdown() {
   });
 
   const [isClient, setIsClient] = useState(false);
-  const [eventDate, setEventDate] = useState<Date | null>(null);
+  const [targetDate, setTargetDate] = useState<Date | null>(null);
 
-  // Fecha objetivo fija
   useEffect(() => {
+    // This ensures all date logic runs only on the client
     setIsClient(true);
-    const targetDate = getFixedTargetDate();
-    setEventDate(targetDate);
-
-    // 👉 Si ya no quieres alerta, quítala
-    // alert('Fecha objetivo: ' + targetDate.toString());
-  }, []);
-
-  // Lógica de cuenta regresiva
-  useEffect(() => {
-    if (!eventDate) return;
+    const dateFromData = new Date(eventData.date);
+    setTargetDate(dateFromData);
 
     const calculateTimeLeft = () => {
       const now = new Date();
-      const diffMs = eventDate.getTime() - now.getTime();
+      const diffMs = dateFromData.getTime() - now.getTime();
 
       if (diffMs <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -76,18 +65,19 @@ export function Countdown() {
       setTimeLeft({ days, hours, minutes, seconds });
     };
 
-    calculateTimeLeft();
+    calculateTimeLeft(); // Initial calculation
     const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
-  }, [eventDate]);
+  }, []); // Empty dependency array ensures this runs once on mount
 
-  if (!isClient || !eventDate) {
+  if (!isClient || !targetDate) {
+    // Render a placeholder or nothing on the server and during initial client render
     return <div className="h-48" />;
   }
 
   const formattedDate = format(
-    eventDate,
+    targetDate,
     "eeee, dd 'de' MMMM 'de' yyyy",
     { locale: es }
   );
@@ -95,7 +85,7 @@ export function Countdown() {
   const values = Object.values(timeLeft);
   const isEventTime = values.every((val) => val === 0);
 
-  if (isEventTime && isClient) {
+  if (isEventTime) {
     return (
       <section className="py-12">
         <div className="container mx-auto text-center">
