@@ -59,7 +59,12 @@ export const eventData: Event = {
   ],
   dressCode: {
     label: 'Etiqueta (Formal)',
-    palette: ['#F8C8DC', '#869D7D', '#D4AF37', '#B1A2C4'],
+    palette: [
+        { name: 'Rosado', value: '#F8C8DC' },
+        { name: 'Verde', value: '#869D7D' },
+        { name: 'Dorado', value: '#D4AF37' },
+        { name: 'Morado', value: '#B1A2C4' }
+    ],
   },
   gifts: {
     bank: {

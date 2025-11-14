@@ -57,19 +57,21 @@ export function DressCode({ dressCode }: DressCodeProps) {
           </CardHeader>
           <CardContent>
             <motion.div
-              className="flex justify-center gap-4"
+              className="flex justify-center gap-4 flex-wrap"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.8 }}
             >
               {dressCode.palette.map((color, index) => (
-                <motion.div key={index} variants={itemVariants}>
+                <motion.div key={index} variants={itemVariants} className="flex flex-col items-center gap-2">
                   <div
-                    className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white/50 shadow-md"
-                    style={{ backgroundColor: color }}
-                    title={color}
-                  />
+                    className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white/50 shadow-md flex items-center justify-center"
+                    style={{ backgroundColor: color.value }}
+                    title={color.name}
+                  >
+                  </div>
+                  <span className="text-sm font-medium text-muted-foreground">{color.name}</span>
                 </motion.div>
               ))}
             </motion.div>

@@ -27,9 +27,14 @@ export type ProgramItem = {
   imageUrl?: string;
 };
 
+export type ColorInfo = {
+  name: string;
+  value: string;
+}
+
 export type DressCode = {
   label: string;
-  palette: string[];
+  palette: ColorInfo[];
 };
 
 export type GiftInfo = {
