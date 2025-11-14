@@ -1,33 +1,39 @@
 'use client';
 import { motion } from 'framer-motion';
 import type { DressCode as DressCodeType } from '@/lib/types';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 
 type DressCodeProps = {
   dressCode: DressCodeType;
 };
 
-const containerVariants = {
-  hidden: {},
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
   visible: {
+    opacity: 1,
+    y: 0,
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
+      duration: 0.5,
     },
   },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      type: 'spring',
-      stiffness: 100,
-    },
-  },
-};
+const DressIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-16 w-16 text-foreground/80">
+    <path d="M12 2l4 4-2 3-2-2-2 2-2-3z" fill="currentColor"/>
+    <path d="M6 11l-2 11h16l-2-11H6z" fill="currentColor"/>
+  </svg>
+);
+
+
+const TuxedoIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-16 w-16 text-foreground/80">
+    <path d="M12 2l4 4-4 4-4-4 4-4z" fill="currentColor"/>
+    <path d="M10 10l-2 12h8l-2-12H10z" fill="currentColor"/>
+    <path d="M10 10l2-2 2 2" stroke="hsl(var(--background))" strokeWidth="1"/>
+  </svg>
+);
+
 
 export function DressCode({ dressCode }: DressCodeProps) {
   return (
@@ -50,30 +56,29 @@ export function DressCode({ dressCode }: DressCodeProps) {
         >
           {dressCode.label}
         </motion.p>
-        <Card className="max-w-md mx-auto shadow-lg">
-          <CardHeader>
-            <CardTitle className="font-headline text-center">Colores Reservados</CardTitle>
-            <CardDescription className="text-center">Agradecemos no usar estos colores, son exclusivos para los anfitriones.</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <Card className="max-w-md mx-auto shadow-lg bg-transparent border-none">
+          <CardContent className="p-0">
             <motion.div
-              className="flex justify-center gap-4 flex-wrap"
-              variants={containerVariants}
+              className="space-y-8"
+              variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, amount: 0.8 }}
             >
-              {dressCode.palette.map((color, index) => (
-                <motion.div key={index} variants={itemVariants} className="flex flex-col items-center gap-2">
-                  <div
-                    className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white/50 shadow-md flex items-center justify-center"
-                    style={{ backgroundColor: color.value }}
-                    title={color.name}
-                  >
-                  </div>
-                  <span className="text-sm font-medium text-muted-foreground">{color.name}</span>
-                </motion.div>
-              ))}
+              <motion.div variants={itemVariants} className="flex items-center gap-6">
+                <DressIcon />
+                <div className="text-left">
+                  <h3 className="font-semibold text-xl">Damas:</h3>
+                  <p className="text-lg text-muted-foreground">{dressCode.ladies}</p>
+                </div>
+              </motion.div>
+              <motion.div variants={itemVariants} className="flex items-center gap-6">
+                <TuxedoIcon />
+                <div className="text-left">
+                  <h3 className="font-semibold text-xl">Caballeros:</h3>
+                  <p className="text-lg text-muted-foreground">{dressCode.gentlemen}</p>
+                </div>
+              </motion.div>
             </motion.div>
           </CardContent>
         </Card>

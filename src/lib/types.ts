@@ -34,7 +34,8 @@ export type ColorInfo = {
 
 export type DressCode = {
   label: string;
-  palette: ColorInfo[];
+  ladies: string;
+  gentlemen: string;
 };
 
 export type GiftInfo = {
