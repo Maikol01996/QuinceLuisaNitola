@@ -26,10 +26,11 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
-import { PlusCircle, Trash2, Users, Calendar, Download } from 'lucide-react';
+import { PlusCircle, Trash2, Users, Calendar, Download, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import successAnimation from '@/lib/success-animation.json';
 import { Label } from '@/components/ui/label';
+import { eventData } from '@/lib/data';
 
 const rsvpSchema = z.object({
   attending: z.enum(['yes', 'no'], { required_error: 'Por favor selecciona una opción.' }),
@@ -101,13 +102,74 @@ export function RsvpSection() {
   async function onSubmit(data: RsvpFormValues) {
     generateWhatsAppMessage(data);
     setIsSubmitted(true);
-    // We don't reset the form immediately to allow the user to see the data
-    // and in case they need to resend. The success screen will handle the next step.
     toast({
       title: "¡Gracias por responder!",
       description: "Se ha abierto WhatsApp para que envíes tu mensaje.",
     });
   }
+
+  const handleResetForm = () => {
+    setIsSubmitted(false);
+    form.reset({
+      attending: undefined,
+      contactName: '',
+      contactEmail: '',
+      attendees: [{ name: '' }],
+    });
+  }
+
+  // --- Calendar Logic ---
+  const getCalendarLinks = () => {
+    const eventDate = new Date(eventData.date);
+    const ceremonyStartTime = eventData.program.find(p => p.icon === 'Church')?.time;
+    const celebrationEndTime = eventData.program.find(p => p.icon === 'Moon')?.time;
+
+    if (!ceremonyStartTime || !celebrationEndTime) return { google: '#', ics: '#' };
+
+    const [startHour, startMinute] = ceremonyStartTime.split(':').map(Number);
+    const startDate = new Date(eventDate);
+    startDate.setHours(startHour, startMinute, 0, 0);
+
+    const [endHour, endMinute] = celebrationEndTime.split(':').map(Number);
+    const endDate = new Date(eventDate);
+    if (endHour < startHour) { // Event ends on the next day
+      endDate.setDate(endDate.getDate() + 1);
+    }
+    endDate.setHours(endHour, endMinute, 0, 0);
+    
+    const toUtcFormat = (date: Date) => date.toISOString().replace(/-|:|\.\d+/g, '');
+    
+    const startTimeUtc = toUtcFormat(startDate);
+    const endTimeUtc = toUtcFormat(endDate);
+
+    const title = encodeURIComponent(eventData.title);
+    const details = encodeURIComponent(`Únete a la celebración de los 15 años de Luisa. Código de vestimenta: ${eventData.dressCode.label}. Hashtag: ${eventData.hashtag}`);
+    const location = encodeURIComponent(`${eventData.venues[0].name}, ${eventData.venues[0].address}`);
+
+    // Google Calendar Link
+    const googleLink = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTimeUtc}/${endTimeUtc}&details=${details}&location=${location}`;
+
+    // ICS File Content
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'BEGIN:VEVENT',
+      `URL:${document.location.href}`,
+      `DTSTART:${startTimeUtc}`,
+      `DTEND:${endTimeUtc}`,
+      `SUMMARY:${eventData.title}`,
+      `DESCRIPTION:${details.replace(/%0A/g, '\\n')}`,
+      `LOCATION:${eventData.venues[0].name}, ${eventData.venues[0].address}`,
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\n');
+    const icsLink = `data:text/calendar;charset=utf8,${encodeURIComponent(icsContent)}`;
+
+    return { google: googleLink, ics: icsLink };
+  }
+
+  const { google, ics } = getCalendarLinks();
+
 
   if (isSubmitted) {
     return (
@@ -121,13 +183,14 @@ export function RsvpSection() {
           <CardContent className="space-y-4">
              <p>Si la ventana de WhatsApp no se abrió, puedes hacer clic de nuevo en el botón de abajo.</p>
              <Button onClick={form.handleSubmit(onSubmit)}>Reintentar envío a WhatsApp</Button>
-            <Separator className="my-4" />
+            <Separator className="my-6" />
             <p className="text-sm text-muted-foreground">Puedes agregar el evento a tu calendario para no olvidarlo.</p>
             <div className="flex gap-4 justify-center">
-              <Button variant="outline"><Calendar className="mr-2 h-4 w-4" /> Google</Button>
-              <Button variant="outline"><Calendar className="mr-2 h-4 w-4" /> Apple</Button>
-              <Button variant="outline"><Download className="mr-2 h-4 w-4" /> ICS</Button>
+              <Button variant="outline" asChild><a href={google} target="_blank" rel="noopener noreferrer"><Calendar className="mr-2 h-4 w-4" /> Google</a></Button>
+              <Button variant="outline" asChild><a href={ics} download="invitacion-luisa-xv.ics"><Download className="mr-2 h-4 w-4" /> Apple/ICS</a></Button>
             </div>
+             <Separator className="my-6" />
+             <Button variant="link" onClick={handleResetForm}><RefreshCw className="mr-2 h-4 w-4" /> Confirmar por otra persona</Button>
           </CardContent>
         </Card>
       </section>
