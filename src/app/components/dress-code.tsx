@@ -57,8 +57,8 @@ export function DressCode({ dressCode }: DressCodeProps) {
         >
           {dressCode.label}
         </motion.p>
-        <Card className="max-w-xl mx-auto shadow-lg bg-transparent border-none">
-          <CardContent className="p-0">
+        <Card className="max-w-xl mx-auto shadow-lg bg-card border">
+          <CardContent className="p-8">
             <motion.div
               className="space-y-8"
               variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
@@ -91,17 +91,17 @@ export function DressCode({ dressCode }: DressCodeProps) {
                     <p className="text-muted-foreground">
                         Estos colores son para los anfitriones, por favor evita usarlos.
                     </p>
-                    <div className="flex justify-center items-center gap-4 pt-2">
-                    {dressCode.reservedColors.map((color) => (
-                        <div key={color.name} className="flex flex-col items-center gap-2">
-                            <div
-                                className="h-16 w-16 rounded-full border-2 border-border flex items-center justify-center text-xs font-semibold text-white"
-                                style={{ backgroundColor: color.value, textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
-                            >
-                                {color.name}
-                            </div>
-                        </div>
-                    ))}
+                    <div className="flex justify-center items-center gap-4 pt-4">
+                      {dressCode.reservedColors.map((color) => (
+                          <div key={color.name} className="flex flex-col items-center gap-2">
+                              <div
+                                  className="h-16 w-16 rounded-full border-2 border-border flex items-center justify-center text-xs font-semibold text-white"
+                                  style={{ backgroundColor: color.value, textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
+                              >
+                                  {color.name}
+                              </div>
+                          </div>
+                      ))}
                     </div>
                 </motion.div>
                 </>
