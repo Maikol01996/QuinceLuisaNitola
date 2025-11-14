@@ -45,7 +45,7 @@ const rsvpSchema = z.object({
   messageForLuisa: z.string().optional(),
 }).refine(data => {
   if (data.attending === 'yes') {
-    return data.attendees && data.attendees.length > 0 && data.attendees.every(a => a.name.length > 0);
+    return data.attendees && data.attendees.length > 0 && data.attendees.every(a => a.name.trim().length > 0);
   }
   return true;
 }, {
@@ -88,7 +88,7 @@ export function RsvpSection() {
                 `👥 Asistentes (${data.attendees?.length || 0})\n${attendeeList}\n\n` +
                 `📧 Correo de contacto: ${data.contactEmail || 'No proporcionado'}\n\n` +
                 `🍽️ Alergias o restricciones alimentarias: ${data.allergies || 'Ninguna'}\n\n` +
-                `💌 Mensaje para Luisa:\n${data.messageForLuisa || '¡Nos vemos en la fiesta!'}\n\n` +
+                `💌 Mensaje para Luisa:\n${data.messageForLuisa || '¡Nos vemos en la fiesta!'} ✨\n\n` +
                 `¡Muchas gracias por la invitación, nos vemos en la fiesta! 🎉`;
     } else { // 'no'
         message = `🎀 Notificación de asistencia a los 15 de Luisa 🎀\n\n` +
@@ -310,7 +310,9 @@ export function RsvpSection() {
                           )}
                         />
                       ))}
-                      <FormMessage>{form.formState.errors.attendees?.message}</FormMessage>
+                      {form.formState.errors.attendees && (
+                          <p className="text-sm font-medium text-destructive">{form.formState.errors.attendees.message}</p>
+                      )}
                     </div>
 
                     <FormField control={form.control} name="allergies" render={({ field }) => (
