@@ -1,23 +1,9 @@
 'use client';
-import { Suspense, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import dynamic from 'next/dynamic';
-import { Skeleton } from '@/components/ui/skeleton';
-
-const EnvelopeModel = dynamic(() => import('./envelope-model').then(mod => mod.EnvelopeModel), {
-  ssr: false,
-  loading: () => <Skeleton className="h-full w-full rounded-full" />
-});
 
 export function Gifts() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    // This ensures the component only renders on the client side
-    setIsClient(true);
-  }, []);
 
   return (
     <section id="regalos" className="container mx-auto px-4">
@@ -37,13 +23,10 @@ export function Gifts() {
         <div className="max-w-md mx-auto">
           <Card className="text-center">
             <CardHeader>
-              <div className="mx-auto h-48 w-48">
-                <Suspense fallback={<Skeleton className="h-full w-full rounded-full" />}>
-                   {isClient && <EnvelopeModel modelPath="/Objeto3D/CartaLluviaSobres.glb" />}
-                </Suspense>
-              </div>
+               <div className="mx-auto h-48 w-48 flex items-center justify-center">
+                 <CreditCard className="h-24 w-24 text-primary" />
+               </div>
               <CardTitle className="flex items-center justify-center gap-2 font-headline text-2xl">
-                <CreditCard className="text-accent" />
                 Lluvia de Sobres
               </CardTitle>
             </CardHeader>
