@@ -1,98 +1,100 @@
-import type { Event, Guest } from './types';
+import type { Event, Guest } from "./types";
 
-// Calculate event date to be 31 days from now
-const eventDate = new Date();
-eventDate.setDate(eventDate.getDate() + 31);
+// Fecha fija del evento en zona horaria de Bogotá (UTC-5)
+const EVENT_DATE_ISO = "2025-12-14T16:00:00-05:00";
 
 export const eventData: Event = {
-  id: 'luisa-xv-2025',
-  title: 'XV de Luisa Nitola',
-  // Use string to avoid timezone issues. This represents Bogota time (UTC-5).
-  date: eventDate.toISOString(),
-  timezone: 'America/Bogota',
+  id: "luisa-xv-2025",
+  title: "XV de Luisa Nitola",
+  // Usamos directamente el string ISO con offset de Bogotá
+  date: EVENT_DATE_ISO,
+  timezone: "America/Bogota",
   hero: {
-    headline: 'Mis 15 Años',
-    backgroundStyle: 'parallax',
+    headline: "Mis 15 Años",
+    backgroundStyle: "parallax",
   },
   parents: [
-    { role: 'Padre', name: 'Jimmy Nitola' },
-    { role: 'Madre', name: 'Heidy Torres' },
+    { role: "Padre", name: "Jimmy Nitola" },
+    { role: "Madre", name: "Heidy Torres" },
   ],
   padrinos: [
-    { name: 'Brandon Torres', role: 'Padrino' },
-    { name: 'Mayra Huamani', role: 'Madrina' },
+    { name: "Brandon Torres", role: "Padrino" },
+    { name: "Mayra Huamani", role: "Madrina" },
   ],
   venues: [
     {
-      type: 'Ceremonia',
-      name: 'Hacienda Salamanca',
-      address: 'Vía Tenjo, Cundinamarca',
+      type: "Ceremonia",
+      name: "Hacienda Salamanca",
+      address: "Vía Tenjo, Cundinamarca",
       lat: 4.7783357,
       lng: -74.1757042,
-      time: '16:00',
-      photoUrl: '/Iglesia.jpeg',
-      imageHint: 'church ceremony',
-      mapUrl: 'https://www.google.com/maps/place/Hacienda+salamanca/@4.7783357,-74.1757042,14.61z/data=!4m14!1m7!3m6!1s0x8e3f81863e149d85:0x28f737da52c42c8e!2sHacienda+salamanca!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm!3m5!1s0x8e3f81863e149d85:0x28f737da52c42c8e!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm?entry=ttu&g_ep=EgoyMDI1MTExMC4wIKXMDSoASAFQAw%3D%3D',
+      time: "16:00",
+      photoUrl: "/Iglesia.jpeg",
+      imageHint: "church ceremony",
+      mapUrl:
+        "https://www.google.com/maps/place/Hacienda+salamanca/@4.7783357,-74.1757042,14.61z/data=!4m14!1m7!3m6!1s0x8e3f81863e149d85:0x28f737da52c42c8e!2sHacienda+salamanca!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm!3m5!1s0x8e3f81863e149d85:0x28f737da52c42c8e!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm?entry=ttu&g_ep=EgoyMDI1MTExMC4wIKXMDSoASAFQAw%3D%3D",
     },
     {
-      type: 'Recepción',
-      name: 'Hacienda Salamanca',
-      address: 'Vía Tenjo, Cundinamarca',
+      type: "Recepción",
+      name: "Hacienda Salamanca",
+      address: "Vía Tenjo, Cundinamarca",
       lat: 4.7783357,
       lng: -74.1757042,
-      time: '18:00',
-      photoUrl: '/Salamanca.jpg',
-      imageHint: 'event hall night',
-      mapUrl: 'https://www.google.com/maps/place/Hacienda+salamanca/@4.7783357,-74.1757042,14.61z/data=!4m14!1m7!3m6!1s0x8e3f81863e149d85:0x28f737da52c42c8e!2sHacienda+salamanca!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm!3m5!1s0x8e3f81863e149d85:0x28f737da52c42c8e!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm?entry=ttu&g_ep=EgoyMDI1MTExMC4wIKXMDSoASAFQAw%3D%3D',
+      time: "18:00",
+      photoUrl: "/Salamanca.jpg",
+      imageHint: "event hall night",
+      mapUrl:
+        "https://www.google.com/maps/place/Hacienda+salamanca/@4.7783357,-74.1757042,14.61z/data=!4m14!1m7!3m6!1s0x8e3f81863e149d85:0x28f737da52c42c8e!2sHacienda+salamanca!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm!3m5!1s0x8e3f81863e149d85:0x28f737da52c42c8e!8m2!3d4.7932181!4d-74.1803894!16s%2Fg%2F11c5wwwdtm?entry=ttu&g_ep=EgoyMDI1MTExMC4wIKXMDSoASAFQAw%3D%3D",
     },
   ],
   program: [
-    { time: '16:00', title: 'Eucaristía de Acción de Gracias', icon: 'Church' },
-    { time: '17:30', title: 'Recepción y sesión fotográfica', icon: 'Camera' },
-    { time: '18:30', title: 'Entrada de la quinceañera', icon: 'Cocktail' },
-    { time: '19:00', title: 'Vals de honor', icon: 'Music' },
-    { time: '19:30', title: 'Brindis especial', icon: 'Champagne' },
-    { time: '20:00', title: 'Cena', icon: 'Dinner' },
-    { time: '21:00', title: 'Baile sorpresa', icon: 'Music' },
-    { time: '22:00', title: 'Fiesta general', icon: 'Music' },
-    { time: '02:00', title: 'Cierre de celebración', icon: 'Moon' },
+    { time: "16:00", title: "Eucaristía de Acción de Gracias", icon: "Church" },
+    { time: "17:30", title: "Recepción y sesión fotográfica", icon: "Camera" },
+    { time: "18:30", title: "Entrada de la quinceañera", icon: "Cocktail" },
+    { time: "19:00", title: "Vals de honor", icon: "Music" },
+    { time: "19:30", title: "Brindis especial", icon: "Champagne" },
+    { time: "20:00", title: "Cena", icon: "Dinner" },
+    { time: "21:00", title: "Baile sorpresa", icon: "Music" },
+    { time: "22:00", title: "Fiesta general", icon: "Music" },
+    { time: "02:00", title: "Cierre de celebración", icon: "Moon" },
   ],
   dressCode: {
-    label: 'Etiqueta (Formal)',
-    ladies: 'Vestido largo o coctel',
-    gentlemen: 'Traje formal',
+    label: "Etiqueta (Formal)",
+    ladies: "Vestido largo o coctel",
+    gentlemen: "Traje formal",
     reservedColors: [
-        { name: 'Rosado', value: '#E6A8B8' },
-        { name: 'Verde', value: '#A3C9A8' },
-        { name: 'Dorado', value: '#F3D6A2' },
-        { name: 'Morado', value: '#C3B1E1' },
-      ]
+      { name: "Rosado", value: "#E6A8B8" },
+      { name: "Verde", value: "#A3C9A8" },
+      { name: "Dorado", value: "#F3D6A2" },
+      { name: "Morado", value: "#C3B1E1" },
+    ],
   },
   gifts: {
     bank: {
-      bankName: 'Bancolombia',
-      accountHolder: 'Luisa Nitola',
-      acctOrIban: '123-456789-00',
+      bankName: "Bancolombia",
+      accountHolder: "Luisa Nitola",
+      acctOrIban: "123-456789-00",
     },
-    registryLabel: 'Mesa de Regalos en Falabella',
-    registryUrl: '#',
+    registryLabel: "Mesa de Regalos en Falabella",
+    registryUrl: "#",
   },
   suggestions: {
     hotels: [
-      { name: 'JW Marriott Hotel Bogota', phone: '+576014816000', mapUrl: '#' },
-      { name: 'Sofitel Bogota Victoria Regia', phone: '+576016466390', mapUrl: '#' },
+      { name: "JW Marriott Hotel Bogota", phone: "+576014816000", mapUrl: "#" },
+      { name: "Sofitel Bogota Victoria Regia", phone: "+576016466390", mapUrl: "#" },
     ],
-    tourism: ['Museo del Oro', 'Cerro de Monserrate'],
+    tourism: ["Museo del Oro", "Cerro de Monserrate"],
   },
   playlist: {
-    provider: 'spotify',
-    url: 'https://open.spotify.com/embed/playlist/1sXppDtN8afNNN1LD1B5tH?utm_source=generator',
+    provider: "spotify",
+    url: "https://open.spotify.com/embed/playlist/4KYAqONA4sj3Z4ptf3Y6dM?utm_source=generator",
     public: true,
   },
-  hashtag: '#XVdeLuisa',
+  hashtag: "#XVdeLuisa",
   mediaWallEnabled: true,
-  visibility: 'public',
+  visibility: "public",
 };
+
 
 export const guestsData: Guest[] = [
     { id: 'g1', eventId: 'luisa-xv-2025', name: 'Familia Perez', maxSeats: 4, code: 'a1b2c', status: 'invited' },

@@ -55,6 +55,21 @@ const rsvpSchema = z.object({
 
 type RsvpFormValues = z.infer<typeof rsvpSchema>;
 
+// --- helper sin toISOString ---
+const formatUtcForCalendar = (date: Date): string => {
+  const pad = (n: number) => String(n).padStart(2, '0');
+
+  const year = date.getUTCFullYear();
+  const month = pad(date.getUTCMonth() + 1);
+  const day = pad(date.getUTCDate());
+  const hours = pad(date.getUTCHours());
+  const minutes = pad(date.getUTCMinutes());
+  const seconds = pad(date.getUTCSeconds());
+
+  // Formato: YYYYMMDDTHHMMSSZ
+  return `${year}${month}${day}T${hours}${minutes}${seconds}Z`;
+};
+
 export function RsvpSection() {
   const { toast } = useToast();
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -122,18 +137,17 @@ export function RsvpSection() {
       allergies: '',
       messageForLuisa: '',
     });
-  }
+  };
 
   // --- Calendar Logic ---
   const getCalendarLinks = () => {
     const eventDate = new Date(eventData.date);
     const ceremonyStartTime = eventData.program.find(p => p.icon === 'Church')?.time;
-    // Let's assume the event ends roughly 8 hours after it starts if no end time is specified
+
     let celebrationEndTime;
     if (eventData.program && eventData.program.length > 0) {
       celebrationEndTime = eventData.program[eventData.program.length - 1].time;
     }
-
 
     if (!ceremonyStartTime || !celebrationEndTime) return { google: '#', ics: '#' };
 
@@ -148,13 +162,14 @@ export function RsvpSection() {
     }
     endDate.setHours(endHour, endMinute, 0, 0);
     
-    const toUtcFormat = (date: Date) => date.toISOString().replace(/-|:|\.\d+/g, '');
-    
-    const startTimeUtc = toUtcFormat(startDate);
-    const endTimeUtc = toUtcFormat(endDate);
+    // 👇 sin usar toISOString
+    const startTimeUtc = formatUtcForCalendar(startDate);
+    const endTimeUtc = formatUtcForCalendar(endDate);
 
     const title = encodeURIComponent(eventData.title);
-    const details = encodeURIComponent(`Únete a la celebración de los 15 años de Luisa. Código de vestimenta: ${eventData.dressCode.label}. Hashtag: ${eventData.hashtag}`);
+    const details = encodeURIComponent(
+      `Únete a la celebración de los 15 años de Luisa. Código de vestimenta: ${eventData.dressCode.label}. Hashtag: ${eventData.hashtag}`
+    );
     const location = encodeURIComponent(`${eventData.venues[0].name}, ${eventData.venues[0].address}`);
 
     // Google Calendar Link
@@ -177,31 +192,48 @@ export function RsvpSection() {
     const icsLink = `data:text/calendar;charset=utf8,${encodeURIComponent(icsContent)}`;
 
     return { google: googleLink, ics: icsLink };
-  }
+  };
 
   const { google, ics } = getCalendarLinks();
-
 
   if (isSubmitted) {
     return (
       <section id="rsvp-success" className="container mx-auto px-4 py-16 text-center">
         <Card className="max-w-lg mx-auto">
           <CardHeader>
-            <Lottie animationData={successAnimation} loop={false} style={{ height: 150, width: 150, margin: '0 auto' }} />
+            <Lottie
+              animationData={successAnimation}
+              loop={false}
+              style={{ height: 150, width: 150, margin: '0 auto' }}
+            />
             <CardTitle className="font-headline text-3xl">¡Mensaje listo!</CardTitle>
-            <CardDescription>Gracias por responder. Por favor, envía el mensaje en WhatsApp para finalizar.</CardDescription>
+            <CardDescription>
+              Gracias por responder. Por favor, envía el mensaje en WhatsApp para finalizar.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-             <p>Si la ventana de WhatsApp no se abrió, puedes hacer clic de nuevo en el botón de abajo.</p>
-             <Button onClick={form.handleSubmit(onSubmit)}>Reintentar envío a WhatsApp</Button>
+            <p>Si la ventana de WhatsApp no se abrió, puedes hacer clic de nuevo en el botón de abajo.</p>
+            <Button onClick={form.handleSubmit(onSubmit)}>Reintentar envío a WhatsApp</Button>
             <Separator className="my-6" />
-            <p className="text-sm text-muted-foreground">Puedes agregar el evento a tu calendario para no olvidarlo.</p>
+            <p className="text-sm text-muted-foreground">
+              Puedes agregar el evento a tu calendario para no olvidarlo.
+            </p>
             <div className="flex gap-4 justify-center">
-              <Button variant="outline" asChild><a href={google} target="_blank" rel="noopener noreferrer"><Calendar className="mr-2 h-4 w-4" /> Google</a></Button>
-              <Button variant="outline" asChild><a href={ics} download="invitacion-luisa-xv.ics"><Download className="mr-2 h-4 w-4" /> Apple/ICS</a></Button>
+              <Button variant="outline" asChild>
+                <a href={google} target="_blank" rel="noopener noreferrer">
+                  <Calendar className="mr-2 h-4 w-4" /> Google
+                </a>
+              </Button>
+              <Button variant="outline" asChild>
+                <a href={ics} download="invitacion-luisa-xv.ics">
+                  <Download className="mr-2 h-4 w-4" /> Apple/ICS
+                </a>
+              </Button>
             </div>
-             <Separator className="my-6" />
-             <Button variant="link" onClick={handleResetForm}><RefreshCw className="mr-2 h-4 w-4" /> Confirmar por otra persona</Button>
+            <Separator className="my-6" />
+            <Button variant="link" onClick={handleResetForm}>
+              <RefreshCw className="mr-2 h-4 w-4" /> Confirmar por otra persona
+            </Button>
           </CardContent>
         </Card>
       </section>
@@ -229,7 +261,9 @@ export function RsvpSection() {
                   name="attending"
                   render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-lg font-semibold">¿Asistirás a la celebración?</FormLabel>
+                      <FormLabel className="text-lg font-semibold">
+                        ¿Asistirás a la celebración?
+                      </FormLabel>
                       <FormControl>
                         <RadioGroup
                           onValueChange={field.onChange}
@@ -240,7 +274,10 @@ export function RsvpSection() {
                             <FormControl>
                               <RadioGroupItem value="yes" id="yes" className="peer sr-only" />
                             </FormControl>
-                            <Label htmlFor="yes" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                            <Label
+                              htmlFor="yes"
+                              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                            >
                               Sí, ¡allí estaré!
                             </Label>
                           </FormItem>
@@ -248,7 +285,10 @@ export function RsvpSection() {
                             <FormControl>
                               <RadioGroupItem value="no" id="no" className="peer sr-only" />
                             </FormControl>
-                            <Label htmlFor="no" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                            <Label
+                              htmlFor="no"
+                              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                            >
                               No podré asistir
                             </Label>
                           </FormItem>
@@ -262,35 +302,57 @@ export function RsvpSection() {
                 {watchAttending && (
                   <div className="space-y-4 animate-in fade-in duration-500">
                     <Separator />
-                    <FormField control={form.control} name="contactName" render={({ field }) => (
+                    <FormField
+                      control={form.control}
+                      name="contactName"
+                      render={({ field }) => (
                         <FormItem>
                           <FormLabel>Tu nombre completo (o nombre de la familia)</FormLabel>
-                          <FormControl><Input placeholder="Nombre y Apellido" {...field} /></FormControl>
+                          <FormControl>
+                            <Input placeholder="Nombre y Apellido" {...field} />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
-                      )} 
+                      )}
                     />
                   </div>
                 )}
-                
+
                 {watchAttending && (
                   <div className="space-y-8 animate-in fade-in duration-500">
                     {watchAttending === 'yes' && (
-                       <FormField control={form.control} name="contactEmail" render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Tu correo electrónico (Opcional)</FormLabel>
-                          <FormControl><Input placeholder="email@ejemplo.com" {...field} /></FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )} />
+                      <FormField
+                        control={form.control}
+                        name="contactEmail"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Tu correo electrónico (Opcional)</FormLabel>
+                            <FormControl>
+                              <Input placeholder="email@ejemplo.com" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     )}
 
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                         <h3 className="text-lg font-semibold flex items-center gap-2"><Users /> 
-                           {watchAttending === 'yes' ? 'Quiénes Asisten' : 'Quiénes no podrán asistir (Opcional)'}
-                         </h3>
-                         <Button type="button" variant="outline" size="sm" onClick={() => append({ name: '' })}><PlusCircle className="mr-2 h-4 w-4" />Añadir</Button>
+                        <h3 className="text-lg font-semibold flex items-center gap-2">
+                          <Users />
+                          {watchAttending === 'yes'
+                            ? 'Quiénes Asisten'
+                            : 'Quiénes no podrán asistir (Opcional)'}
+                        </h3>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => append({ name: '' })}
+                        >
+                          <PlusCircle className="mr-2 h-4 w-4" />
+                          Añadir
+                        </Button>
                       </div>
                       {fields.map((field, index) => (
                         <FormField
@@ -304,7 +366,12 @@ export function RsvpSection() {
                                   <Input placeholder={`Nombre ${index + 1}`} {...field} />
                                 </FormControl>
                                 {fields.length > 1 && (
-                                  <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => remove(index)}
+                                  >
                                     <Trash2 className="h-4 w-4 text-destructive" />
                                   </Button>
                                 )}
@@ -315,40 +382,63 @@ export function RsvpSection() {
                         />
                       ))}
                       {form.formState.errors.attendees && watchAttending === 'yes' && (
-                          <p className="text-sm font-medium text-destructive">{form.formState.errors.attendees.message}</p>
+                        <p className="text-sm font-medium text-destructive">
+                          {form.formState.errors.attendees.message}
+                        </p>
                       )}
                     </div>
-                    
+
                     {watchAttending === 'yes' && (
-                      <FormField control={form.control} name="allergies" render={({ field }) => (
+                      <FormField
+                        control={form.control}
+                        name="allergies"
+                        render={({ field }) => (
                           <FormItem>
                             <FormLabel>Alergias o restricciones alimentarias</FormLabel>
-                            <FormControl><Textarea placeholder="Ej: alergia a los frutos secos" {...field} /></FormControl>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Ej: alergia a los frutos secos"
+                                {...field}
+                              />
+                            </FormControl>
                           </FormItem>
                         )}
                       />
                     )}
-                    
-                    <FormField control={form.control} name="messageForLuisa" render={({ field }) => (
+
+                    <FormField
+                      control={form.control}
+                      name="messageForLuisa"
+                      render={({ field }) => (
                         <FormItem>
                           <FormLabel>
-                            {watchAttending === 'yes' 
-                              ? 'Mensaje para Luisa' 
+                            {watchAttending === 'yes'
+                              ? 'Mensaje para Luisa'
                               : 'Lamentamos que no puedas venir. Si quieres, deja un mensaje para Luisa.'}
                           </FormLabel>
                           <FormControl>
-                            <Textarea 
-                              placeholder={watchAttending === 'yes' ? "¡Déjale un bonito mensaje a la quinceañera!" : "Te echaremos de menos..."}
-                              {...field} />
+                            <Textarea
+                              placeholder={
+                                watchAttending === 'yes'
+                                  ? '¡Déjale un bonito mensaje a la quinceañera!'
+                                  : 'Te echaremos de menos...'
+                              }
+                              {...field}
+                            />
                           </FormControl>
                         </FormItem>
                       )}
                     />
                   </div>
                 )}
-                
+
                 {watchAttending && (
-                   <Button type="submit" size="lg" className="w-full" disabled={form.formState.isSubmitting}>
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
                     {form.formState.isSubmitting ? 'Enviando...' : 'Enviar Confirmación por WhatsApp'}
                   </Button>
                 )}
