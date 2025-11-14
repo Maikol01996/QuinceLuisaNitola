@@ -3,7 +3,12 @@ import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { EnvelopeModel } from './envelope-model';
+import dynamic from 'next/dynamic';
+
+const EnvelopeModel = dynamic(() => import('./envelope-model').then(mod => mod.EnvelopeModel), {
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-secondary rounded-full animate-pulse" />
+});
 
 export function Gifts() {
   return (
