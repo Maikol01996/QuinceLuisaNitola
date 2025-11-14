@@ -32,6 +32,8 @@ const itemVariants = {
 };
 
 export function FamilySection({ parents, padrinos }: FamilySectionProps) {
+  const parentNames = parents.map(p => p.name).join(' & ');
+
   return (
     <section className="container mx-auto px-4">
       <motion.div
@@ -48,19 +50,10 @@ export function FamilySection({ parents, padrinos }: FamilySectionProps) {
           Con la bendición de mis Padres
         </motion.h2>
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-12"
-          variants={containerVariants}
+          className="max-w-2xl mx-auto mb-12"
+          variants={itemVariants}
         >
-          {parents.map((parent) => (
-            <motion.div key={parent.name} variants={itemVariants}>
-              <Card className="text-center h-full hover:shadow-lg transition-shadow duration-300">
-                <CardHeader>
-                  <CardTitle className="font-headline text-2xl">{parent.name}</CardTitle>
-                  <CardDescription className="text-primary">{parent.role}</CardDescription>
-                </CardHeader>
-              </Card>
-            </motion.div>
-          ))}
+            <p className="font-headline text-3xl">{parentNames}</p>
         </motion.div>
 
         <motion.h2
